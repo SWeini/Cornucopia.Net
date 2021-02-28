@@ -14,7 +14,7 @@ namespace Cornucopia.Collections
     {
         public SpaceOptimalDynamicArray()
         {
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             _blocks = Array.Empty<T[]>();
 #else
             _blocks = new T[0][];
