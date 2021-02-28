@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Memory" Version="4.5.0" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
     <ProjectReference Include="..\Cornucopia.BitOperations\Cornucopia.BitOperations.csproj" />
   </ItemGroup>
