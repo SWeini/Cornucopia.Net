@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <RootNamespace>Cornucopia.Collections</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cornucopia.Collections\Cornucopia.Collections.csproj" />
+    <ProjectReference Include="..\Cornucopia.BitOperations\Cornucopia.BitOperations.csproj">
+      <Aliases>CcBitOperations</Aliases>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
