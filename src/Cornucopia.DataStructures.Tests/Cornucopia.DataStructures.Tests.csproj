@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <RootNamespace>Cornucopia.Collections</RootNamespace>
+    <RootNamespace>Cornucopia.DataStructures</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cornucopia.Collections\Cornucopia.Collections.csproj" />
+    <ProjectReference Include="..\Cornucopia.DataStructures\Cornucopia.DataStructures.csproj" />
   </ItemGroup>
 
 </Project>
