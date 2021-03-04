@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 
-namespace Cornucopia.Collections
+namespace Cornucopia.DataStructures
 {
     [TestFixture]
     public class SpaceOptimalDynamicArrayTests

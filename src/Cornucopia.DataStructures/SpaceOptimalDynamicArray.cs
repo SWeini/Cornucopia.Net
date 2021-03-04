@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace Cornucopia.Collections
+namespace Cornucopia.DataStructures
 {
     [DebuggerTypeProxy(typeof(SpaceOptimalDynamicArray<>.DebuggerView))]
     [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
