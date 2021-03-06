@@ -4,15 +4,15 @@
     {
         public static BinaryTree<T>? Empty => null;
 
-        public BinaryTree(T value, BinaryTree<T>? leftChild, BinaryTree<T>? rightChild)
+        public BinaryTree(BinaryTree<T>? leftChild, BinaryTree<T>? rightChild, T value)
         {
-            this.Value = value;
             this.LeftChild = leftChild;
             this.RightChild = rightChild;
+            this.Value = value;
         }
 
-        public T Value { get; }
         public BinaryTree<T>? LeftChild { get; }
         public BinaryTree<T>? RightChild { get; }
+        public T Value { get; }
     }
 }

@@ -86,7 +86,7 @@ namespace Cornucopia.DataStructures.Persistent
                 {
                     if (first.Head.Count == second.Head.Count)
                     {
-                        var combinedTree = new BinaryTree<T>(value, first.Head.Tree, second.Head.Tree);
+                        var combinedTree = new BinaryTree<T>(first.Head.Tree, second.Head.Tree, value);
                         var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
                         return new(second.Tail.Prepend(combinedNode));
                     }

@@ -9,7 +9,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public static BinaryTree<T> Create<T>(T value)
         {
-            return new(value, null, null);
+            return new(null, null, value);
         }
 
         [Pure]
