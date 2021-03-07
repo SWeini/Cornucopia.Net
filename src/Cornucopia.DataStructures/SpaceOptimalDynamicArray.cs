@@ -156,7 +156,7 @@ namespace Cornucopia.DataStructures
             }
         }
 
-        [DebuggerDisplay("Count = {Count}", Name = "[{Indices,nq}]")]
+        [DebuggerDisplay("Count = {" + nameof(Count) + "}", Name = "[{" + nameof(Indices) + ",nq}]")]
         private class DebuggerViewSlice
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -189,7 +189,7 @@ namespace Cornucopia.DataStructures
             public int Count => _length;
         }
 
-        [DebuggerDisplay("{Value}", Name = "[{Index}]")]
+        [DebuggerDisplay("{" + nameof(Value) + "}", Name = "[{" + nameof(Index) + "}]")]
         private class DebuggerViewEntry
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Collapsed)]

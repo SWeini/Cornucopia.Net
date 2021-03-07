@@ -4,14 +4,13 @@
     {
         public static LinkedList<T>? Empty => null;
 
-        internal LinkedList(T head, LinkedList<T>? tail)
+        internal LinkedList(LinkedList<T>? tail, T head)
         {
-            this.Head = head;
             this.Tail = tail;
+            this.Head = head;
         }
 
-        public T Head { get; }
-
         public LinkedList<T>? Tail { get; }
+        public T Head { get; }
     }
 }

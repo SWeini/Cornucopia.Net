@@ -9,7 +9,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public static LinkedList<T> Create<T>(T value)
         {
-            return new(value, null);
+            return new(null, value);
         }
 
         [Pure]
@@ -63,7 +63,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public static LinkedList<T> Prepend<T>(this LinkedList<T>? list, T value)
         {
-            return new(value, list);
+            return new(list, value);
         }
 
         [Pure]

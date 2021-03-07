@@ -113,7 +113,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void RemoveFirst_SingleElement_ExtractsElement()
         {
             var list = RandomAccessList.Create(42);
-            list.RemoveFirst(out var first);
+            _ = list.RemoveFirst(out var first);
             Assert.That(first, Is.EqualTo(42));
         }
 
@@ -128,7 +128,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void RemoveFirst_MultipleElements_ExtractsFirstElement()
         {
             var list = RandomAccessList.Create(1, 2, 3);
-            list.RemoveFirst(out var first);
+            _ = list.RemoveFirst(out var first);
             Assert.That(first, Is.EqualTo(1));
         }
 
