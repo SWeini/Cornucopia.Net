@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -41,6 +42,7 @@ namespace Cornucopia.DataStructures
             }
         }
 
+        [ExcludeFromCodeCoverage]
         T IReadOnlyList<T>.this[int index] => this[index];
 
         public void Add(T item)
@@ -121,6 +123,7 @@ namespace Cornucopia.DataStructures
             blockSize = 1 << hi;
         }
 
+        [ExcludeFromCodeCoverage]
         private class DebuggerView
         {
             private readonly SpaceOptimalDynamicArray<T> _array;
@@ -157,6 +160,7 @@ namespace Cornucopia.DataStructures
         }
 
         [DebuggerDisplay("Count = {" + nameof(Count) + "}", Name = "[{" + nameof(Indices) + ",nq}]")]
+        [ExcludeFromCodeCoverage]
         private class DebuggerViewSlice
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -190,6 +194,7 @@ namespace Cornucopia.DataStructures
         }
 
         [DebuggerDisplay("{" + nameof(Value) + "}", Name = "[{" + nameof(Index) + "}]")]
+        [ExcludeFromCodeCoverage]
         private class DebuggerViewEntry
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Collapsed)]
@@ -224,9 +229,10 @@ namespace Cornucopia.DataStructures
             }
         }
 
+        [ExcludeFromCodeCoverage]
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }
