@@ -8,6 +8,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
     <Authors>Simon Weinberger</Authors>
     <Description>A .NET library containing various data structures and algorithms, such as random-access lists and finger trees.</Description>
     <Copyright>Copyright ⓒ 2021 Simon Weinberger</Copyright>

@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
     <Authors>Simon Weinberger</Authors>
     <Description>Shim for System.Numerics.BitOperations</Description>
     <Copyright>Copyright ⓒ 2021 Simon Weinberger</Copyright>
