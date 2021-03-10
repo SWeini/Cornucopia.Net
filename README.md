@@ -1,11 +1,11 @@
 # Cornucopia.Net
 
-![GitHub top language](https://img.shields.io/github/languages/top/SWeini/Cornucopia.Net)
-![GitHub last commit](https://img.shields.io/github/last-commit/SWeini/Cornucopia.Net)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/SWeini/Cornucopia.Net)
-![GitHub issues](https://img.shields.io/github/issues/SWeini/Cornucopia.Net)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWeini/Cornucopia.Net/dotnet%20package)
-![GitHub](https://img.shields.io/github/license/SWeini/Cornucopia.Net)
+[![GitHub top language](https://img.shields.io/github/languages/top/SWeini/Cornucopia.Net)](https://docs.microsoft.com/dotnet/csharp/)
+[![GitHub last commit](https://img.shields.io/github/last-commit/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/pulls)
+[![GitHub issues](https://img.shields.io/github/issues/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/issues)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWeini/Cornucopia.Net/dotnet%20package/master?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/actions/workflows/build.yaml?query=branch%3Amaster)
+[![GitHub](https://img.shields.io/github/license/SWeini/Cornucopia.Net)](https://github.com/SWeini/Cornucopia.Net/blob/master/LICENSE)
 
 ---
 
