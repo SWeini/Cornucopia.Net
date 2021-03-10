@@ -27,3 +27,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       working-directory: ./src
+    - uses: actions/upload-artifact@v2
+      with:
+        name: nuget
+        path: ./src/**/*.nupkg
