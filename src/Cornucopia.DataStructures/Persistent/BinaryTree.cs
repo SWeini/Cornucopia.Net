@@ -6,6 +6,11 @@ namespace Cornucopia.DataStructures.Persistent
     {
         public static BinaryTree<T>? Empty => null;
 
+        public BinaryTree(T value)
+        {
+            this.Value = value;
+        }
+
         public BinaryTree(BinaryTree<T>? leftChild, BinaryTree<T>? rightChild, T value)
         {
             this.LeftChild = leftChild;

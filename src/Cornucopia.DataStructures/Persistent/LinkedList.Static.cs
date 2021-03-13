@@ -9,7 +9,13 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public static LinkedList<T> Create<T>(T value)
         {
-            return new(null, value);
+            return new(value);
+        }
+
+        [Pure]
+        public static LinkedList<T> Prepend<T>(this LinkedList<T>? list, T value)
+        {
+            return new(list, value);
         }
 
         [Pure]
@@ -30,12 +36,6 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 throw new InvalidOperationException("Collection is empty.");
             }
-        }
-
-        [Pure]
-        public static LinkedList<T> Prepend<T>(this LinkedList<T>? list, T value)
-        {
-            return new(list, value);
         }
     }
 }

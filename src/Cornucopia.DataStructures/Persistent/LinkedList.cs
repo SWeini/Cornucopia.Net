@@ -7,6 +7,11 @@ namespace Cornucopia.DataStructures.Persistent
     {
         public static LinkedList<T>? Empty => null;
 
+        internal LinkedList(T head)
+        {
+            this.Head = head;
+        }
+
         internal LinkedList(LinkedList<T>? tail, T head)
         {
             this.Tail = tail;
