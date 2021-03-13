@@ -60,7 +60,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Test]
         public void ForEachPreOrder_SmallTree_ActionIsCalledWithElementsInOrder()
         {
-            var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
+            var tree = BinaryTree.Create(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
             tree.ForEachPreOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] { 1, 2, 3 }));
@@ -69,7 +69,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Test]
         public void ForEachPostOrder_SmallTree_ActionIsCalledWithElementsInOrder()
         {
-            var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
+            var tree = BinaryTree.Create(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
             tree.ForEachPostOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] { 2, 3, 1 }));
@@ -78,7 +78,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Test]
         public void ForEachInOrder_SmallTree_ActionIsCalledWithElementsInOrder()
         {
-            var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
+            var tree = BinaryTree.Create(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
             tree.ForEachInOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] { 2, 1, 3 }));
