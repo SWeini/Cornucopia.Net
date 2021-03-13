@@ -5,41 +5,90 @@ namespace Cornucopia.DataStructures.Persistent
     /// <summary>
     ///     A persistent binary tree.
     /// </summary>
-    /// <remarks>The value <c>null</c> is valid and represents an empty tree.</remarks>
     /// <typeparam name="T">The type of elements stored by the tree.</typeparam>
-    public sealed class BinaryTree<T>
+    public readonly partial struct BinaryTree<T>
     {
         /// <summary>
         ///     The empty tree.
         /// </summary>
-        public static BinaryTree<T>? Empty => null;
+        public static BinaryTree<T> Empty => default;
+
+        private readonly Node? _root;
+
+        private BinaryTree(Node? root)
+        {
+            this._root = root;
+        }
 
         internal BinaryTree(T value)
         {
-            this.Value = value;
+            this._root = new(value);
         }
 
-        internal BinaryTree(BinaryTree<T>? leftChild, BinaryTree<T>? rightChild, T value)
+        internal BinaryTree(BinaryTree<T> leftSubTree, BinaryTree<T> rightSubTree, T value)
         {
-            this.LeftChild = leftChild;
-            this.RightChild = rightChild;
-            this.Value = value;
+            this._root = new(leftSubTree._root, rightSubTree._root, value);
         }
 
         /// <summary>
-        ///     The left child node.
+        ///     Gets a value indicating whether this tree is empty.
         /// </summary>
-        public BinaryTree<T>? LeftChild { get; }
+        /// <returns><c>true</c> if the tree is empty; otherwise, <c>false</c>.</returns>
+        public bool IsEmpty => this._root == null;
 
         /// <summary>
-        ///     The right child node.
+        ///     Gets a value indicating whether this tree has any elements.
         /// </summary>
-        public BinaryTree<T>? RightChild { get; }
+        /// <returns><c>true</c> if the tree has any elements; otherwise, <c>false</c>.</returns>
+        public bool Any => this._root != null;
 
         /// <summary>
-        ///     The element in this node.
+        ///     The left subtree.
         /// </summary>
-        public T Value { get; }
+        public BinaryTree<T> LeftSubTree
+        {
+            get
+            {
+                if (this._root == null)
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
+                return new(this._root.LeftChild);
+            }
+        }
+
+        /// <summary>
+        ///     The right subtree.
+        /// </summary>
+        public BinaryTree<T> RightSubTree
+        {
+            get
+            {
+                if (this._root == null)
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
+                return new(this._root.RightChild);
+            }
+        }
+
+        /// <summary>
+        ///     The element in the root node.
+        /// </summary>
+        public T RootValue
+        {
+            get
+            {
+                if (this._root == null)
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
+                return this._root.Value;
+            }
+        }
 
         /// <summary>
         ///     Performs the specified action on each element of the tree, using a pre-order traversal.
@@ -47,9 +96,7 @@ namespace Cornucopia.DataStructures.Persistent
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
         public void ForEachPreOrder(Action<T> action)
         {
-            action(this.Value);
-            this.LeftChild?.ForEachPreOrder(action);
-            this.RightChild?.ForEachPreOrder(action);
+            this._root?.ForEachPreOrder(action);
         }
 
         /// <summary>
@@ -58,9 +105,7 @@ namespace Cornucopia.DataStructures.Persistent
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
         public void ForEachInOrder(Action<T> action)
         {
-            this.LeftChild?.ForEachInOrder(action);
-            action(this.Value);
-            this.RightChild?.ForEachInOrder(action);
+            this._root?.ForEachInOrder(action);
         }
 
         /// <summary>
@@ -69,9 +114,7 @@ namespace Cornucopia.DataStructures.Persistent
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
         public void ForEachPostOrder(Action<T> action)
         {
-            this.LeftChild?.ForEachPostOrder(action);
-            this.RightChild?.ForEachPostOrder(action);
-            action(this.Value);
+            this._root?.ForEachPostOrder(action);
         }
     }
 }

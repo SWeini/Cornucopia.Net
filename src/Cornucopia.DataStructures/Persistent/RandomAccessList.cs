@@ -85,14 +85,14 @@ namespace Cornucopia.DataStructures.Persistent
                 {
                     if (first.Head.Count == second.Head.Count)
                     {
-                        var combinedTree = BinaryTree.Create(first.Head.Tree, second.Head.Tree, value);
+                        var combinedTree = BinaryTree.CreateNode(first.Head.Tree, second.Head.Tree, value);
                         var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
                         return new(new(second.Tail, combinedNode));
                     }
                 }
             }
 
-            var singleValueTree = BinaryTree.Create(value);
+            var singleValueTree = BinaryTree.CreateNode(value);
             var singleValueNode = new Node(singleValueTree, 1);
             return new(new(first, singleValueNode));
         }
@@ -206,13 +206,13 @@ namespace Cornucopia.DataStructures.Persistent
 
         private readonly struct Node
         {
-            public Node(BinaryTree<T> tree, int count)
+            public Node(BinaryTree<T>.Node tree, int count)
             {
                 this.Tree = tree;
                 this.Count = count;
             }
 
-            public BinaryTree<T> Tree { get; }
+            public BinaryTree<T>.Node Tree { get; }
             public int Count { get; }
         }
     }
