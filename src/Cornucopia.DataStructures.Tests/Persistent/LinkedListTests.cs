@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace Cornucopia.DataStructures.Persistent
@@ -83,14 +84,14 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(0).Prepend(42);
             Assert.That(list.Head, Is.EqualTo(42));
         }
-        
+
         [Test]
         public void ForEach_OneElement_ActionIsCalledWithElement()
         {
             var list = LinkedList.Create(42);
             var arguments = new List<int>();
             list.ForEach(arguments.Add);
-            Assert.That(arguments, Is.EqualTo(new[] {42}));
+            Assert.That(arguments, Is.EqualTo(new[] { 42 }));
         }
 
         [Test]
@@ -99,9 +100,9 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(42).Prepend(10).Prepend(0);
             var arguments = new List<int>();
             list.ForEach(arguments.Add);
-            Assert.That(arguments, Is.EqualTo(new[] {0, 10, 42}));
+            Assert.That(arguments, Is.EqualTo(new[] { 0, 10, 42 }));
         }
-        
+
         [Test]
         public void Reverse_SingleElement_IsSameSequence()
         {
@@ -124,9 +125,9 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(42).Prepend(10).Prepend(0).Reverse();
             var elements = new List<int>();
             list.ForEach(elements.Add);
-            Assert.That(elements, Is.EqualTo(new[] {42, 10, 0}));
+            Assert.That(elements, Is.EqualTo(new[] { 42, 10, 0 }));
         }
-        
+
         [Test]
         public void Count_SingleElement_IsOne()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using NUnit.Framework;
 
 namespace Cornucopia.DataStructures
@@ -75,7 +76,7 @@ namespace Cornucopia.DataStructures
         {
             var arr = new SpaceOptimalDynamicArray<int>();
             arr.Add(42);
-            Assert.That(arr.ToList(), Is.EqualTo(new[] {42}));
+            Assert.That(arr.ToList(), Is.EqualTo(new[] { 42 }));
         }
 
         [TestCase(1000)]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace Cornucopia.DataStructures.Persistent
@@ -55,14 +56,14 @@ namespace Cornucopia.DataStructures.Persistent
             var tree = BinaryTree.Create(0);
             Assert.That(tree.Any(), Is.True);
         }
-        
+
         [Test]
         public void ForEachPreOrder_SmallTree_ActionIsCalledWithElementsInOrder()
         {
             var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
             tree.ForEachPreOrder(list.Add);
-            Assert.That(list, Is.EqualTo(new[] {1, 2, 3}));
+            Assert.That(list, Is.EqualTo(new[] { 1, 2, 3 }));
         }
 
         [Test]
