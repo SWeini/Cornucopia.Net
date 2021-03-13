@@ -136,7 +136,7 @@ namespace Cornucopia.DataStructures.Persistent
             var list = this._root;
             while (list.Any())
             {
-                BinaryTree.ForEachPreOrder(list.Head.Tree, action);
+                list.Head.Tree.ForEachPreOrder(action);
                 list = list.Tail;
             }
         }

@@ -55,36 +55,13 @@ namespace Cornucopia.DataStructures.Persistent
             var tree = BinaryTree.Create(0);
             Assert.That(tree.Any(), Is.True);
         }
-
-        [Test]
-        public void ForEachPreOrder_EmptyTree_ActionIsCalledWithElementsInOrder()
-        {
-            var tree = BinaryTree<int>.Empty;
-            BinaryTree.ForEachPreOrder(tree, _ => Assert.Fail());
-        }
-
-
-        [Test]
-        public void ForEachPostOrder_EmptyTree_ActionIsCalledWithElementsInOrder()
-        {
-            var tree = BinaryTree<int>.Empty;
-            BinaryTree.ForEachPostOrder(tree, _ => Assert.Fail());
-        }
-
-
-        [Test]
-        public void ForEachInOrder_EmptyTree_ActionIsCalledWithElementsInOrder()
-        {
-            var tree = BinaryTree<int>.Empty;
-            BinaryTree.ForEachInOrder(tree, _ => Assert.Fail());
-        }
-
+        
         [Test]
         public void ForEachPreOrder_SmallTree_ActionIsCalledWithElementsInOrder()
         {
             var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
-            BinaryTree.ForEachPreOrder(tree, list.Add);
+            tree.ForEachPreOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] {1, 2, 3}));
         }
 
@@ -93,7 +70,7 @@ namespace Cornucopia.DataStructures.Persistent
         {
             var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
-            BinaryTree.ForEachPostOrder(tree, list.Add);
+            tree.ForEachPostOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] { 2, 3, 1 }));
         }
 
@@ -102,7 +79,7 @@ namespace Cornucopia.DataStructures.Persistent
         {
             var tree = new BinaryTree<int>(BinaryTree.Create(2), BinaryTree.Create(3), 1);
             var list = new List<int>();
-            BinaryTree.ForEachInOrder(tree, list.Add);
+            tree.ForEachInOrder(list.Add);
             Assert.That(list, Is.EqualTo(new[] { 2, 1, 3 }));
         }
     }
