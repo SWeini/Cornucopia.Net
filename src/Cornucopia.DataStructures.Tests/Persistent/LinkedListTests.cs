@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace Cornucopia.DataStructures.Persistent
@@ -85,19 +86,12 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [Test]
-        public void ForEach_Empty_DoesNotCallAction()
-        {
-            var list = LinkedList<int>.Empty;
-            list.ForEach(_ => Assert.Fail());
-        }
-
-        [Test]
         public void ForEach_OneElement_ActionIsCalledWithElement()
         {
             var list = LinkedList.Create(42);
             var arguments = new List<int>();
             list.ForEach(arguments.Add);
-            Assert.That(arguments, Is.EqualTo(new[] {42}));
+            Assert.That(arguments, Is.EqualTo(new[] { 42 }));
         }
 
         [Test]
@@ -106,14 +100,7 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(42).Prepend(10).Prepend(0);
             var arguments = new List<int>();
             list.ForEach(arguments.Add);
-            Assert.That(arguments, Is.EqualTo(new[] {0, 10, 42}));
-        }
-
-        [Test]
-        public void Reverse_Empty_IsNull()
-        {
-            var list = LinkedList<int>.Empty.Reverse();
-            Assert.That(list, Is.Null);
+            Assert.That(arguments, Is.EqualTo(new[] { 0, 10, 42 }));
         }
 
         [Test]
@@ -138,15 +125,7 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(42).Prepend(10).Prepend(0).Reverse();
             var elements = new List<int>();
             list.ForEach(elements.Add);
-            Assert.That(elements, Is.EqualTo(new[] {42, 10, 0}));
-        }
-
-        [Test]
-        public void Count_Empty_IsZero()
-        {
-            var list = LinkedList<int>.Empty;
-            var count = list.Count();
-            Assert.That(count, Is.Zero);
+            Assert.That(elements, Is.EqualTo(new[] { 42, 10, 0 }));
         }
 
         [Test]

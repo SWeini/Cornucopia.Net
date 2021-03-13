@@ -136,36 +136,18 @@ namespace Cornucopia.DataStructures.Persistent
             var list = this._root;
             while (list.Any())
             {
-                BinaryTree.ForEachPreOrder(list.Head.Tree, action);
+                list.Head.Tree.ForEachPreOrder(action);
                 list = list.Tail;
             }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            var list = this._root;
-            while (list.Any())
+            var list = this;
+            while (list.Any)
             {
-                var node = list.Head;
-                list = list.Tail;
-
-                var todo = LinkedList.Create(node.Tree);
-                while (todo.Any())
-                {
-                    var tree = todo.Head;
-                    yield return tree.Value;
-                    todo = todo.Tail;
-
-                    if (tree.RightChild.Any())
-                    {
-                        todo = todo.Prepend(tree.RightChild);
-                    }
-
-                    if (tree.LeftChild.Any())
-                    {
-                        todo = todo.Prepend(tree.LeftChild);
-                    }
-                }
+                list = list.RemoveFirst(out var next);
+                yield return next;
             }
         }
 
