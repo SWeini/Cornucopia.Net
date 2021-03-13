@@ -4,8 +4,15 @@ using System.Diagnostics.Contracts;
 
 namespace Cornucopia.DataStructures.Persistent
 {
+    /// <summary>
+    ///     A persistent random-access list.
+    /// </summary>
+    /// <typeparam name="T">The type of elements stored by the list.</typeparam>
     public readonly struct RandomAccessList<T>
     {
+        /// <summary>
+        ///     The empty list.
+        /// </summary>
         public static RandomAccessList<T> Empty => default;
 
         private readonly LinkedList<Node>? _root;
@@ -15,10 +22,22 @@ namespace Cornucopia.DataStructures.Persistent
             this._root = root;
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether this list is empty.
+        /// </summary>
+        /// <value><c>true</c> if the list is empty; otherwise, <c>false</c>.</value>
         public bool IsEmpty => this._root.IsEmpty();
 
+        /// <summary>
+        ///     Gets a value indicating whether this list has any elements.
+        /// </summary>
+        /// <value><c>true</c> if the list has any elements; otherwise, <c>false</c>.</value>
         public bool Any => this._root.Any();
 
+        /// <summary>
+        ///     Counts the elements in the list.
+        /// </summary>
+        /// <returns>The number of elements in the list.</returns>
         [Pure]
         public int Count()
         {
@@ -33,15 +52,28 @@ namespace Cornucopia.DataStructures.Persistent
             return result;
         }
 
+        /// <summary>
+        ///     Gets the first element of the list.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The list contains no elements.</exception>
         public T First
         {
             get
             {
-                this._root.EnsureNotEmpty();
+                if (this._root.IsEmpty())
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
                 return this._root.Head.Tree.Value;
             }
         }
 
+        /// <summary>
+        ///     Prepends a specified element to the list.
+        /// </summary>
+        /// <param name="value">The element to prepend to the list.</param>
+        /// <returns>A new list with <paramref name="value"/> followed by the list.</returns>
         [Pure]
         public RandomAccessList<T> AddFirst(T value)
         {
@@ -53,7 +85,7 @@ namespace Cornucopia.DataStructures.Persistent
                 {
                     if (first.Head.Count == second.Head.Count)
                     {
-                        var combinedTree = new BinaryTree<T>(first.Head.Tree, second.Head.Tree, value);
+                        var combinedTree = BinaryTree.Create(first.Head.Tree, second.Head.Tree, value);
                         var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
                         return new(second.Tail.Prepend(combinedNode));
                     }
@@ -65,10 +97,20 @@ namespace Cornucopia.DataStructures.Persistent
             return new(first.Prepend(singleValueNode));
         }
 
+        /// <summary>
+        ///     Extracts the first element from the list.
+        /// </summary>
+        /// <param name="value">The first element of the list.</param>
+        /// <returns>A new list with all elements of the list, except the first.</returns>
+        /// <exception cref="InvalidOperationException">The list contains no elements.</exception>
         [Pure]
         public RandomAccessList<T> RemoveFirst(out T value)
         {
-            this._root.EnsureNotEmpty();
+            if (this._root.IsEmpty())
+            {
+                ThrowHelper.ThrowInvalidOperationException();
+            }
+
             var tree = this._root.Head.Tree;
             value = tree.Value;
             if (this._root.Head.Count == 1)
@@ -83,6 +125,12 @@ namespace Cornucopia.DataStructures.Persistent
                 .Prepend(new(tree.LeftChild!, halfCount)));
         }
 
+        /// <summary>
+        ///     Gets an element at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the element to get.</param>
+        /// <returns>The element at the specified index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The specified index is out of range.</exception>
         public T this[int index]
         {
             get
@@ -131,6 +179,10 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
+        /// <summary>
+        ///     Performs the specified action on each element of the list.
+        /// </summary>
+        /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the list.</param>
         public void ForEach(Action<T> action)
         {
             var list = this._root;
@@ -141,6 +193,10 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
+        /// <summary>
+        ///     Gets an enumerator to iterate over the elements of the list.
+        /// </summary>
+        /// <returns>The enumerator to iterate over the elements of the list.</returns>
         public IEnumerator<T> GetEnumerator()
         {
             var list = this;

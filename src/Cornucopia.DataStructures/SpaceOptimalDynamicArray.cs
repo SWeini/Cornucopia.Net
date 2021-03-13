@@ -9,10 +9,17 @@ using System.Runtime.CompilerServices;
 
 namespace Cornucopia.DataStructures
 {
+    /// <summary>
+    ///     A dynamic list of elements.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [DebuggerTypeProxy(typeof(SpaceOptimalDynamicArray<>.DebuggerView))]
     [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
     public class SpaceOptimalDynamicArray<T> : IReadOnlyList<T>
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SpaceOptimalDynamicArray{T}"/> class that is empty.
+        /// </summary>
         public SpaceOptimalDynamicArray()
         {
 #if NETCOREAPP3_1
@@ -26,8 +33,19 @@ namespace Cornucopia.DataStructures
 
         private int _count;
 
+        /// <summary>
+        ///     Gets the number of elements contained in the list.
+        /// </summary>
+        /// <value>The number of elements in the list.</value>
         public int Count => this._count;
 
+        /// <summary>
+        ///     Gets a reference to an element at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the element reference to get.</param>
+        /// <returns>The element reference at the specified index.</returns>
+        /// <remarks>The reference is guaranteed to be valid as long as the list contains this index.</remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The specified index is out of range.</exception>
         public ref T this[int index]
         {
             get
@@ -45,6 +63,10 @@ namespace Cornucopia.DataStructures
         [ExcludeFromCodeCoverage]
         T IReadOnlyList<T>.this[int index] => this[index];
 
+        /// <summary>
+        ///     Appends a specified element to the list.
+        /// </summary>
+        /// <param name="item">The element to append to the list.</param>
         public void Add(T item)
         {
             LocateIndex(this._count, out var blockIndex, out var elementIndex, out var blockSize);
@@ -65,6 +87,10 @@ namespace Cornucopia.DataStructures
             this._count++;
         }
 
+        /// <summary>
+        ///     Increases the number of elements contained in the list.
+        /// </summary>
+        /// <remarks>Does not initialize the element.</remarks>
         public void Grow()
         {
             LocateIndex(this._count, out var blockIndex, out _, out var blockSize);
@@ -84,6 +110,11 @@ namespace Cornucopia.DataStructures
             this._count++;
         }
 
+        /// <summary>
+        ///     Decreases the number of elements contained in the list.
+        /// </summary>
+        /// <remarks>Does not cleanup the element.</remarks>
+        /// <exception cref="InvalidOperationException">The list is empty.</exception>
         public void Shrink()
         {
             if (this._count == 0)
@@ -178,13 +209,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-            public DebuggerViewEntry[] Items
-            {
-                get
-                {
-                    return _array.Take(_length).Select((x, i) => new DebuggerViewEntry(x, i + _offset)).ToArray();
-                }
-            }
+            public DebuggerViewEntry[] Items => _array.Take(_length).Select((x, i) => new DebuggerViewEntry(x, i + _offset)).ToArray();
 
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public string Indices => $"{this._offset}..{this._offset + this._length - 1}";
@@ -209,6 +234,10 @@ namespace Cornucopia.DataStructures
             }
         }
 
+        /// <summary>
+        ///     Gets an enumerator to iterate over the elements of the list.
+        /// </summary>
+        /// <returns>The enumerator to iterate over the elements of the list.</returns>
         public IEnumerator<T> GetEnumerator()
         {
             var blocks = this._blocks;
