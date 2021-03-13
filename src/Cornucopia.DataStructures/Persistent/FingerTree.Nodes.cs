@@ -8,7 +8,7 @@ namespace Cornucopia.DataStructures.Persistent
 {
     partial struct FingerTree<T>
     {
-        public abstract class BaseNode
+        private abstract class BaseNode
         {
             protected BaseNode(int count)
             {
@@ -21,7 +21,7 @@ namespace Cornucopia.DataStructures.Persistent
             public abstract void ForEach(Action<T> action);
         }
 
-        public class View<TNode>
+        private class View<TNode>
             where TNode : BaseNode
         {
             public View(TNode node, Func<StemNode<TNode>> tree)
@@ -34,7 +34,7 @@ namespace Cornucopia.DataStructures.Persistent
             public Func<StemNode<TNode>> Tree { get; }
         }
 
-        public readonly struct Split<TNode>
+        private readonly struct Split<TNode>
             where TNode : BaseNode
         {
             public Split(StemNode<TNode> leftTree, TNode node, StemNode<TNode> rightTree)
@@ -49,7 +49,7 @@ namespace Cornucopia.DataStructures.Persistent
             public StemNode<TNode> RightTree { get; }
         }
 
-        public static TreeNode<TNode>[] Nodes<TNode>(TNode[] nodes)
+        private static TreeNode<TNode>[] Nodes<TNode>(TNode[] nodes)
             where TNode : BaseNode
         {
             Debug.Assert(nodes.Length >= 2);
@@ -83,7 +83,7 @@ namespace Cornucopia.DataStructures.Persistent
             return result;
         }
 
-        public abstract class StemNode<TNode> : BaseNode
+        private abstract class StemNode<TNode> : BaseNode
             where TNode : BaseNode
         {
             protected StemNode(int count)
@@ -100,7 +100,7 @@ namespace Cornucopia.DataStructures.Persistent
             public abstract Split<TNode> Split(int index);
         }
 
-        public sealed class EmptyNode<TNode> : StemNode<TNode>
+        private sealed class EmptyNode<TNode> : StemNode<TNode>
             where TNode : BaseNode
         {
             public static EmptyNode<TNode> Instance { get; } = new();
@@ -168,7 +168,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public sealed class SingleNode<TNode> : StemNode<TNode>
+        private sealed class SingleNode<TNode> : StemNode<TNode>
             where TNode : BaseNode
         {
             private readonly TNode _child;
@@ -223,7 +223,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public sealed class DeepNode<TNode> : StemNode<TNode>
+        private sealed class DeepNode<TNode> : StemNode<TNode>
             where TNode : BaseNode
         {
             private readonly TreeNode<TNode> _prefix;
@@ -488,7 +488,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public abstract class TreeNode<TNode> : BaseNode
+        private abstract class TreeNode<TNode> : BaseNode
             where TNode : BaseNode
         {
             public int Length { get; set; }
@@ -655,7 +655,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public sealed class TreeNode1<TNode> : TreeNode<TNode>
+        private sealed class TreeNode1<TNode> : TreeNode<TNode>
             where TNode : BaseNode
         {
             public TreeNode1(TNode child0)
@@ -665,7 +665,7 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [SuppressMessage("Microsoft.CodeQuality", "IDE0052:RemoveUnreadPrivateMember")]
-        public sealed class TreeNode2<TNode> : TreeNode<TNode>
+        private sealed class TreeNode2<TNode> : TreeNode<TNode>
         where TNode : BaseNode
         {
             private readonly TNode _child1;
@@ -678,7 +678,7 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [SuppressMessage("Microsoft.CodeQuality", "IDE0052:RemoveUnreadPrivateMember")]
-        public sealed class TreeNode3<TNode> : TreeNode<TNode>
+        private sealed class TreeNode3<TNode> : TreeNode<TNode>
         where TNode : BaseNode
         {
             private readonly TNode _child1;
@@ -693,7 +693,7 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [SuppressMessage("Microsoft.CodeQuality", "IDE0052:RemoveUnreadPrivateMember")]
-        public sealed class TreeNode4<TNode> : TreeNode<TNode>
+        private sealed class TreeNode4<TNode> : TreeNode<TNode>
         where TNode : BaseNode
         {
             private readonly TNode _child1;
@@ -709,7 +709,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public sealed class ItemNode : BaseNode
+        private sealed class ItemNode : BaseNode
         {
             private readonly T _value;
 
