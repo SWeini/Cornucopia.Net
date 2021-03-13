@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 
 namespace Cornucopia.DataStructures.Persistent
 {
@@ -9,13 +8,39 @@ namespace Cornucopia.DataStructures.Persistent
     public static class BinaryTree
     {
         /// <summary>
+        ///     Creates a tree with the specified element at the root node.
+        /// </summary>
+        /// <typeparam name="T">The type of element stored by the tree.</typeparam>
+        /// <param name="value">The element to store at the root node.</param>
+        /// <returns>A tree with the specified element at the root node.</returns>
+        [Pure]
+        public static BinaryTree<T> Create<T>(T value)
+        {
+            return new(value);
+        }
+
+        /// <summary>
+        ///     Creates a node with the specified element and subtrees.
+        /// </summary>
+        /// <typeparam name="T">The type of element stored by the tree.</typeparam>
+        /// <param name="leftSubTree">The left subtree of the root node.</param>
+        /// <param name="rightSubTree">The right subtree of the root node.</param>
+        /// <param name="value">The element to store in the root node.</param>
+        /// <returns>A node with the specified element and subtrees.</returns>
+        [Pure]
+        public static BinaryTree<T> Create<T>(BinaryTree<T> leftSubTree, BinaryTree<T> rightSubTree, T value)
+        {
+            return new(leftSubTree, rightSubTree, value);
+        }
+
+        /// <summary>
         ///     Creates a leaf node with the specified element.
         /// </summary>
         /// <typeparam name="T">The type of element stored by the tree.</typeparam>
         /// <param name="value">The element to store in the leaf node.</param>
         /// <returns>A leaf node with the specified element.</returns>
         [Pure]
-        public static BinaryTree<T> Create<T>(T value)
+        public static BinaryTree<T>.Node CreateNode<T>(T value)
         {
             return new(value);
         }
@@ -24,38 +49,14 @@ namespace Cornucopia.DataStructures.Persistent
         ///     Creates a node with the specified element and children.
         /// </summary>
         /// <typeparam name="T">The type of element stored by the tree.</typeparam>
-        /// <param name="leftChild">The left child to store in the node.</param>
-        /// <param name="rightChild">The right child to store in the node.</param>
-        /// <param name="value">The element to store in the node.</param>
+        /// <param name="leftChild">The left child of the created node.</param>
+        /// <param name="rightChild">The right child of the created node.</param>
+        /// <param name="value">The element to store in the created node.</param>
         /// <returns>A node with the specified element and children.</returns>
         [Pure]
-        public static BinaryTree<T> Create<T>(BinaryTree<T>? leftChild, BinaryTree<T>? rightChild, T value)
+        public static BinaryTree<T>.Node CreateNode<T>(BinaryTree<T>.Node? leftChild, BinaryTree<T>.Node? rightChild, T value)
         {
             return new(leftChild, rightChild, value);
-        }
-
-        /// <summary>
-        ///     Gets a value indicating whether a tree is empty.
-        /// </summary>
-        /// <typeparam name="T">The type of elements stored by the tree.</typeparam>
-        /// <param name="node">The tree to examine.</param>
-        /// <returns><c>true</c> if <paramref name="node"/> is empty; otherwise, <c>false</c>.</returns>
-        [Pure]
-        public static bool IsEmpty<T>([NotNullWhen(false)] this BinaryTree<T>? node)
-        {
-            return node is null;
-        }
-
-        /// <summary>
-        ///     Gets a value indicating whether a tree has any elements.
-        /// </summary>
-        /// <typeparam name="T">The type of elements stored by the tree.</typeparam>
-        /// <param name="node">The tree to examine.</param>
-        /// <returns><c>true</c> if <paramref name="node"/> has any elements; otherwise, <c>false</c>.</returns>
-        [Pure]
-        public static bool Any<T>([NotNullWhen(true)] this BinaryTree<T>? node)
-        {
-            return node is not null;
         }
     }
 }
