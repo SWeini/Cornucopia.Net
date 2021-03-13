@@ -32,51 +32,10 @@ namespace Cornucopia.DataStructures.Persistent
             }
         }
 
-        public static void ForEach<T>(this LinkedList<T>? list, Action<T> action)
-        {
-            while (list.Any())
-            {
-                action(list.Head);
-                list = list.Tail;
-            }
-        }
-
-        [Pure]
-        [return: NotNullIfNotNull("list")]
-        public static LinkedList<T>? Reverse<T>(this LinkedList<T>? list)
-        {
-            if (list.IsEmpty() || list.Tail.IsEmpty())
-            {
-                return list;
-            }
-
-            var result = LinkedList<T>.Empty;
-            do
-            {
-                result = result.Prepend(list.Head);
-                list = list.Tail;
-            } while (list.Any());
-
-            return result;
-        }
-
         [Pure]
         public static LinkedList<T> Prepend<T>(this LinkedList<T>? list, T value)
         {
             return new(list, value);
-        }
-
-        [Pure]
-        public static int Count<T>(this LinkedList<T>? list)
-        {
-            var result = 0;
-            while (list.Any())
-            {
-                list = list.Tail;
-                result++;
-            }
-
-            return result;
         }
     }
 }

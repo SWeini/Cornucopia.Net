@@ -83,14 +83,7 @@ namespace Cornucopia.DataStructures.Persistent
             var list = LinkedList.Create(0).Prepend(42);
             Assert.That(list.Head, Is.EqualTo(42));
         }
-
-        [Test]
-        public void ForEach_Empty_DoesNotCallAction()
-        {
-            var list = LinkedList<int>.Empty;
-            list.ForEach(_ => Assert.Fail());
-        }
-
+        
         [Test]
         public void ForEach_OneElement_ActionIsCalledWithElement()
         {
@@ -108,14 +101,7 @@ namespace Cornucopia.DataStructures.Persistent
             list.ForEach(arguments.Add);
             Assert.That(arguments, Is.EqualTo(new[] {0, 10, 42}));
         }
-
-        [Test]
-        public void Reverse_Empty_IsNull()
-        {
-            var list = LinkedList<int>.Empty.Reverse();
-            Assert.That(list, Is.Null);
-        }
-
+        
         [Test]
         public void Reverse_SingleElement_IsSameSequence()
         {
@@ -140,15 +126,7 @@ namespace Cornucopia.DataStructures.Persistent
             list.ForEach(elements.Add);
             Assert.That(elements, Is.EqualTo(new[] {42, 10, 0}));
         }
-
-        [Test]
-        public void Count_Empty_IsZero()
-        {
-            var list = LinkedList<int>.Empty;
-            var count = list.Count();
-            Assert.That(count, Is.Zero);
-        }
-
+        
         [Test]
         public void Count_SingleElement_IsOne()
         {
