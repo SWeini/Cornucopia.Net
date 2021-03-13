@@ -32,7 +32,7 @@ namespace Cornucopia.DataStructures
         {
             get
             {
-                if ((uint)index >= (uint)this._count)
+                if ((uint) index >= (uint) this._count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
@@ -111,15 +111,15 @@ namespace Cornucopia.DataStructures
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void LocateIndex(int index, out int blockIndex, out int elementIndex, out int blockSize)
         {
-            var r = (uint)index + 1;
+            var r = (uint) index + 1;
             var k = BitOperations.Log2(r);
             var hi = (k + 1) / 2;
             var lo = k / 2;
             var b = r >> hi & ((1u << lo) - 1);
             var p = ((1u << hi) - 1) + ((1u << lo) - 1);
             var e = r & ((1u << hi) - 1);
-            blockIndex = (int)(b + p);
-            elementIndex = (int)e;
+            blockIndex = (int) (b + p);
+            elementIndex = (int) e;
             blockSize = 1 << hi;
         }
 

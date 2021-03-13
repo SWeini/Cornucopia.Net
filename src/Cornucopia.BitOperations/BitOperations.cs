@@ -18,16 +18,16 @@
             value |= value >> 08;
             value |= value >> 16;
 
-            return Log2DeBruijn[(int)((value * 0x07C4ACDDu) >> 27)];
+            return Log2DeBruijn[(int) ((value * 0x07C4ACDDu) >> 27)];
         }
 
         public static int Log2(ulong value)
         {
-            var hi = (uint)(value >> 32);
+            var hi = (uint) (value >> 32);
 
             if (hi == 0)
             {
-                return Log2((uint)value);
+                return Log2((uint) value);
             }
 
             return 32 + Log2(hi);
