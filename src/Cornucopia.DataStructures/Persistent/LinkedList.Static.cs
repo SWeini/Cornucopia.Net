@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace Cornucopia.DataStructures.Persistent
@@ -56,19 +55,6 @@ namespace Cornucopia.DataStructures.Persistent
         public static bool Any<T>([NotNullWhen(true)] this LinkedList<T>? list)
         {
             return list is not null;
-        }
-
-        /// <summary>
-        ///     Ensures that a list is not empty.
-        /// </summary>
-        /// <typeparam name="T">The type of elements stored by the list.</typeparam>
-        /// <param name="list">The list to examine.</param>
-        public static void EnsureNotEmpty<T>([NotNull] this LinkedList<T>? list)
-        {
-            if (list.IsEmpty())
-            {
-                throw new InvalidOperationException("Collection is empty.");
-            }
         }
     }
 }

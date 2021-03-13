@@ -37,7 +37,11 @@ namespace Cornucopia.DataStructures.Persistent
         {
             get
             {
-                this._root.EnsureNotEmpty();
+                if (this._root.IsEmpty())
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
                 return this._root.Head.Tree.Value;
             }
         }
@@ -68,7 +72,11 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public RandomAccessList<T> RemoveFirst(out T value)
         {
-            this._root.EnsureNotEmpty();
+            if (this._root.IsEmpty())
+            {
+                ThrowHelper.ThrowInvalidOperationException();
+            }
+
             var tree = this._root.Head.Tree;
             value = tree.Value;
             if (this._root.Head.Count == 1)
