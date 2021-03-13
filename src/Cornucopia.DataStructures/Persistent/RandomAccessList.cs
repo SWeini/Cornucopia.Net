@@ -15,9 +15,9 @@ namespace Cornucopia.DataStructures.Persistent
         /// </summary>
         public static RandomAccessList<T> Empty => default;
 
-        private readonly LinkedList<Node>? _root;
+        private readonly LinkedList<Node>.Node? _root;
 
-        private RandomAccessList(LinkedList<Node>? root)
+        private RandomAccessList(LinkedList<Node>.Node? root)
         {
             this._root = root;
         }
@@ -26,13 +26,13 @@ namespace Cornucopia.DataStructures.Persistent
         ///     Gets a value indicating whether this list is empty.
         /// </summary>
         /// <value><c>true</c> if the list is empty; otherwise, <c>false</c>.</value>
-        public bool IsEmpty => this._root.IsEmpty();
+        public bool IsEmpty => this._root is null;
 
         /// <summary>
         ///     Gets a value indicating whether this list has any elements.
         /// </summary>
         /// <value><c>true</c> if the list has any elements; otherwise, <c>false</c>.</value>
-        public bool Any => this._root.Any();
+        public bool Any => this._root is not null;
 
         /// <summary>
         ///     Counts the elements in the list.
@@ -43,7 +43,7 @@ namespace Cornucopia.DataStructures.Persistent
         {
             var list = this._root;
             var result = 0;
-            while (list.Any())
+            while (list != null)
             {
                 result += list.Head.Count;
                 list = list.Tail;
@@ -60,7 +60,7 @@ namespace Cornucopia.DataStructures.Persistent
         {
             get
             {
-                if (this._root.IsEmpty())
+                if (this._root == null)
                 {
                     ThrowHelper.ThrowInvalidOperationException();
                 }
@@ -78,23 +78,23 @@ namespace Cornucopia.DataStructures.Persistent
         public RandomAccessList<T> AddFirst(T value)
         {
             var first = this._root;
-            if (first.Any())
+            if (first != null)
             {
                 var second = first.Tail;
-                if (second.Any())
+                if (second != null)
                 {
                     if (first.Head.Count == second.Head.Count)
                     {
                         var combinedTree = BinaryTree.Create(first.Head.Tree, second.Head.Tree, value);
                         var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
-                        return new(second.Tail.Prepend(combinedNode));
+                        return new(new(second.Tail, combinedNode));
                     }
                 }
             }
 
             var singleValueTree = BinaryTree.Create(value);
             var singleValueNode = new Node(singleValueTree, 1);
-            return new(first.Prepend(singleValueNode));
+            return new(new(first, singleValueNode));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public RandomAccessList<T> RemoveFirst(out T value)
         {
-            if (this._root.IsEmpty())
+            if (this._root == null)
             {
                 ThrowHelper.ThrowInvalidOperationException();
             }
@@ -119,10 +119,7 @@ namespace Cornucopia.DataStructures.Persistent
             }
 
             var halfCount = this._root.Head.Count / 2;
-            return new(this._root
-                .Tail
-                .Prepend(new(tree.RightChild!, halfCount))
-                .Prepend(new(tree.LeftChild!, halfCount)));
+            return new(new(new(this._root.Tail, new(tree.RightChild!, halfCount)), new(tree.LeftChild!, halfCount)));
         }
 
         /// <summary>
@@ -141,7 +138,7 @@ namespace Cornucopia.DataStructures.Persistent
                 }
 
                 var list = this._root;
-                while (list.Any())
+                while (list != null)
                 {
                     var node = list.Head;
                     if (index >= node.Count)
@@ -186,7 +183,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void ForEach(Action<T> action)
         {
             var list = this._root;
-            while (list.Any())
+            while (list != null)
             {
                 list.Head.Tree.ForEachPreOrder(action);
                 list = list.Tail;

@@ -6,35 +6,81 @@ namespace Cornucopia.DataStructures.Persistent
     /// <summary>
     ///     A persistent singly-linked list.
     /// </summary>
-    /// <remarks>The value <c>null</c> is valid and represents an empty list.</remarks>
     /// <typeparam name="T">The type of elements stored by the list.</typeparam>
-    public sealed class LinkedList<T>
+    public readonly partial struct LinkedList<T>
     {
         /// <summary>
         ///     The empty list.
         /// </summary>
-        public static LinkedList<T>? Empty => null;
+        public static LinkedList<T> Empty => default;
 
-        internal LinkedList(T head)
+        private readonly Node? _root;
+
+        private LinkedList(Node? root)
         {
-            this.Head = head;
+            this._root = root;
         }
 
-        internal LinkedList(LinkedList<T>? tail, T head)
+        internal LinkedList(T value)
         {
-            this.Tail = tail;
-            this.Head = head;
+            this._root = new(value);
         }
 
         /// <summary>
-        ///     The list without the head element.
+        ///     Gets a value indicating whether this list is empty.
         /// </summary>
-        public LinkedList<T>? Tail { get; }
+        /// <value><c>true</c> if the list is empty; otherwise, <c>false</c>.</value>
+        public bool IsEmpty => this._root == null;
 
         /// <summary>
-        ///     The element at the head of the list.
+        ///     Gets a value indicating whether this list has any elements.
         /// </summary>
-        public T Head { get; }
+        /// <value><c>true</c> if the list has any elements; otherwise, <c>false</c>.</value>
+        public bool Any => this._root != null;
+
+        /// <summary>
+        ///     Gets the first element of the list.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The list contains no elements.</exception>
+        public T First
+        {
+            get
+            {
+                if (this._root == null)
+                {
+                    ThrowHelper.ThrowInvalidOperationException();
+                }
+
+                return this._root.Head;
+            }
+        }
+
+        /// <summary>
+        ///     Prepends a specified element to the list.
+        /// </summary>
+        /// <param name="value">The element to prepend to the list.</param>
+        /// <returns>A new list with <paramref name="value"/> followed by this list.</returns>
+        [Pure]
+        public LinkedList<T> AddFirst(T value)
+        {
+            return new(new Node(this._root, value));
+        }
+
+        /// <summary>
+        ///     Removes the first element from the list.
+        /// </summary>
+        /// <returns>A new list with all elements of the list, except the first.</returns>
+        /// <exception cref="InvalidOperationException">the list contains no elements.</exception>
+        [Pure]
+        public LinkedList<T> RemoveFirst()
+        {
+            if (this._root == null)
+            {
+                ThrowHelper.ThrowInvalidOperationException();
+            }
+
+            return new(this._root.Tail);
+        }
 
         /// <summary>
         ///     Performs the specified action on each element of the list.
@@ -42,12 +88,7 @@ namespace Cornucopia.DataStructures.Persistent
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the list.</param>
         public void ForEach(Action<T> action)
         {
-            var list = this;
-            do
-            {
-                action(list.Head);
-                list = list.Tail;
-            } while (list.Any());
+            this._root?.ForEach(action);
         }
 
         /// <summary>
@@ -58,20 +99,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public LinkedList<T> Reverse()
         {
-            if (this.Tail.IsEmpty())
-            {
-                return this;
-            }
-
-            var result = LinkedList.Create(this.Head);
-            var list = this.Tail;
-            do
-            {
-                result = result.Prepend(list.Head);
-                list = list.Tail;
-            } while (list.Any());
-
-            return result;
+            return new(this._root?.Reverse());
         }
 
         /// <summary>
@@ -81,15 +109,7 @@ namespace Cornucopia.DataStructures.Persistent
         [Pure]
         public int Count()
         {
-            var result = 1;
-            var node = this.Tail;
-            while (node != null)
-            {
-                node = node.Tail;
-                result++;
-            }
-
-            return result;
+            return this._root?.Count() ?? 0;
         }
     }
 }
