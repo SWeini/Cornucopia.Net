@@ -209,13 +209,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-            public DebuggerViewEntry[] Items
-            {
-                get
-                {
-                    return _array.Take(_length).Select((x, i) => new DebuggerViewEntry(x, i + _offset)).ToArray();
-                }
-            }
+            public DebuggerViewEntry[] Items => _array.Take(_length).Select((x, i) => new DebuggerViewEntry(x, i + _offset)).ToArray();
 
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public string Indices => $"{this._offset}..{this._offset + this._length - 1}";

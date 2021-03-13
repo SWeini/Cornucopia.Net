@@ -251,7 +251,7 @@ namespace Cornucopia.DataStructures.Persistent
                 }
             }
 
-            public DeepNode(TreeNode<TNode> prefix, Func<StemNode<TreeNode<TNode>>> deeper, int deeperCount, TreeNode<TNode> suffix)
+            private DeepNode(TreeNode<TNode> prefix, Func<StemNode<TreeNode<TNode>>> deeper, int deeperCount, TreeNode<TNode> suffix)
                 : base(prefix.Count + deeperCount + suffix.Count)
             {
                 this._prefix = prefix;
@@ -491,7 +491,7 @@ namespace Cornucopia.DataStructures.Persistent
         private abstract class TreeNode<TNode> : BaseNode
             where TNode : BaseNode
         {
-            public int Length { get; set; }
+            public int Length { get; }
             private readonly TNode _child0;
 
             protected TreeNode(int count, int length, TNode child0)
@@ -555,7 +555,7 @@ namespace Cornucopia.DataStructures.Persistent
 #endif
             }
 
-            public TNode[] ToArray()
+            private TNode[] ToArray()
             {
                 switch (this.Length)
                 {
