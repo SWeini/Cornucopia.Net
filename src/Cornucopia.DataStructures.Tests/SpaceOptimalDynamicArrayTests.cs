@@ -26,7 +26,7 @@ namespace Cornucopia.DataStructures
         public void Item_IndexNegative_Throws()
         {
             var arr = new SpaceOptimalDynamicArray<int>();
-            Assert.That(() => arr[-1], Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => arr[-1], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [TestCase(0)]
@@ -39,7 +39,7 @@ namespace Cornucopia.DataStructures
                 arr.Add(i);
             }
 
-            Assert.That(() => arr[size], Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => arr[size], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [TestCase(0)]
@@ -52,7 +52,7 @@ namespace Cornucopia.DataStructures
                 arr.Add(i);
             }
 
-            Assert.That(() => arr[size + 1], Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => arr[size + 1], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

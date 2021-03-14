@@ -62,7 +62,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (this._root == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The list is empty.");
                 }
 
                 return this._root.Head.Tree.Value;
@@ -108,7 +108,7 @@ namespace Cornucopia.DataStructures.Persistent
         {
             if (this._root == null)
             {
-                ThrowHelper.ThrowInvalidOperationException();
+                throw new InvalidOperationException("The list is empty.");
             }
 
             var tree = this._root.Head.Tree;
@@ -134,7 +134,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (index < 0)
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 var list = this._root;
@@ -172,7 +172,7 @@ namespace Cornucopia.DataStructures.Persistent
                     }
                 }
 
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
         }
 
