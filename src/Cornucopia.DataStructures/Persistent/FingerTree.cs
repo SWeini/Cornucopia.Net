@@ -51,7 +51,7 @@ namespace Cornucopia.DataStructures.Persistent
                 var view = this._root.First;
                 if (view == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The list is empty.");
                 }
 
                 return view.Node.Value;
@@ -89,7 +89,7 @@ namespace Cornucopia.DataStructures.Persistent
             var view = this._root.First;
             if (view == null)
             {
-                ThrowHelper.ThrowInvalidOperationException();
+                throw new InvalidOperationException("The list is empty.");
             }
 
             first = view.Node.Value;
@@ -107,7 +107,7 @@ namespace Cornucopia.DataStructures.Persistent
                 var view = this._root.Last;
                 if (view == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The list is empty.");
                 }
 
                 return view.Node.Value;
@@ -145,7 +145,7 @@ namespace Cornucopia.DataStructures.Persistent
             var view = this._root.Last;
             if (view == null)
             {
-                ThrowHelper.ThrowInvalidOperationException();
+                throw new InvalidOperationException("The list is empty.");
             }
 
             last = view.Node.Value;

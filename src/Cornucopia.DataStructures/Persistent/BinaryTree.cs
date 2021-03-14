@@ -51,7 +51,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (this._root == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The tree is empty.");
                 }
 
                 return new(this._root.LeftChild);
@@ -67,7 +67,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (this._root == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The tree is empty.");
                 }
 
                 return new(this._root.RightChild);
@@ -83,7 +83,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (this._root == null)
                 {
-                    ThrowHelper.ThrowInvalidOperationException();
+                    throw new InvalidOperationException("The tree is empty.");
                 }
 
                 return this._root.Value;
