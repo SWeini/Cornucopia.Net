@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Cornucopia.DataStructures.Persistent
+namespace Cornucopia.DataStructures
 {
     internal static class ThrowHelper
     {

@@ -134,7 +134,7 @@ namespace Cornucopia.DataStructures.Persistent
             {
                 if (index < 0)
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 var list = this._root;
@@ -172,7 +172,7 @@ namespace Cornucopia.DataStructures.Persistent
                     }
                 }
 
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
         }
 

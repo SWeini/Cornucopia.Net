@@ -165,7 +165,7 @@ namespace Cornucopia.DataStructures.Persistent
                 var node = this._root;
                 if ((uint) index >= (uint) node.Count)
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 return node.GetElementAt(index);
@@ -185,7 +185,7 @@ namespace Cornucopia.DataStructures.Persistent
             var node = this._root;
             if ((uint) index >= (uint) node.Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
             return new((StemNode<ItemNode>) node.SetElementAt(index, value));
@@ -226,7 +226,7 @@ namespace Cornucopia.DataStructures.Persistent
             var node = this._root;
             if ((uint) index > (uint) node.Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
             if (index == 0)
@@ -256,7 +256,7 @@ namespace Cornucopia.DataStructures.Persistent
             var node = this._root;
             if ((uint) index > (uint) node.Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
             if (items.Count == 0)
@@ -290,7 +290,7 @@ namespace Cornucopia.DataStructures.Persistent
             var node = this._root;
             if ((uint) index >= (uint) node.Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
             var split = node.Split(index);

@@ -119,7 +119,7 @@ namespace Cornucopia.DataStructures
         {
             if (this._count == 0)
             {
-                throw new InvalidOperationException("Collection is empty");
+                ThrowHelper.ThrowInvalidOperationException();
             }
 
             LocateIndex(this._count - 1, out var blockIndex, out var elementIndex, out _);
