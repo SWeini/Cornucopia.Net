@@ -20,7 +20,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void Default_ThrowsNullReferenceException()
         {
             FingerTree<int> tree = default;
-            Assert.That(() => tree.Count, Throws.Exception.TypeOf<NullReferenceException>());
+            Assert.That(() => tree.Count, Throws.TypeOf<NullReferenceException>());
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void Item_InvalidIndex_Throws(int index)
         {
             var tree = FingerTree.Create(1, 2, 3);
-            Assert.That(() => tree[index], Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => tree[index], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void SetItem_InvalidIndex_Throws(int index)
         {
             var tree = FingerTree.Create(1, 2, 3);
-            Assert.That(() => tree.SetItem(index, 0), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => tree.SetItem(index, 0), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -379,7 +379,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void Insert_InvalidIndex_Throws(int index)
         {
             var tree = FingerTree.Create(1, 2, 3);
-            Assert.That(() => tree.Insert(index, 0), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => tree.Insert(index, 0), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -414,7 +414,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void InsertRange_InvalidIndex_Throws(int index)
         {
             var tree = FingerTree.Create(1, 2, 3);
-            Assert.That(() => tree.InsertRange(index, FingerTree<int>.Empty), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => tree.InsertRange(index, FingerTree<int>.Empty), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [TestCase(0)]
@@ -453,7 +453,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void RemoveAt_InvalidIndex_Throws(int index)
         {
             var tree = FingerTree.Create(1, 2, 3);
-            Assert.That(() => tree.RemoveAt(index), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => tree.RemoveAt(index), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

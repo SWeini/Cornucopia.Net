@@ -138,7 +138,7 @@ namespace Cornucopia.DataStructures.Persistent
         public void Item_InvalidIndex_Throws(int index)
         {
             var list = RandomAccessList.Create(1, 2, 3);
-            Assert.That(() => list[index], Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => list[index], Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
