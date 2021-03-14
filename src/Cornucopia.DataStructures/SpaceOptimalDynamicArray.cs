@@ -7,12 +7,14 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
+using Cornucopia.DataStructures.Utils;
+
 namespace Cornucopia.DataStructures
 {
     /// <summary>
     ///     A dynamic list of elements.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of elements stored by the list.</typeparam>
     [DebuggerTypeProxy(typeof(SpaceOptimalDynamicArray<>.DebuggerView))]
     [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
     public class SpaceOptimalDynamicArray<T> : IReadOnlyList<T>
@@ -22,11 +24,7 @@ namespace Cornucopia.DataStructures
         /// </summary>
         public SpaceOptimalDynamicArray()
         {
-#if NETCOREAPP3_1
-            _blocks = Array.Empty<T[]>();
-#else
-            _blocks = new T[0][];
-#endif
+            _blocks = ArrayTools.Empty<T[]>();
         }
 
         private T[]?[] _blocks;
