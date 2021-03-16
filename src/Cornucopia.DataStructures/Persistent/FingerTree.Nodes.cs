@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Cornucopia.DataStructures.Persistent
 {
@@ -549,7 +548,7 @@ namespace Cornucopia.DataStructures.Persistent
             public ReadOnlySpan<TNode> AsSpan()
             {
 #if NETCOREAPP3_1
-                return MemoryMarshal.CreateReadOnlySpan(ref Unsafe.AsRef(this._child0), this.Length);
+                return System.Runtime.InteropServices.MemoryMarshal.CreateReadOnlySpan(ref Unsafe.AsRef(this._child0), this.Length);
 #else
                 return this.ToArray();
 #endif

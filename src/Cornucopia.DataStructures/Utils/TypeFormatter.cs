@@ -10,7 +10,7 @@ namespace Cornucopia.DataStructures.Utils
     [ExcludeFromCodeCoverage]
     internal static class TypeFormatter
     {
-        private static Dictionary<Type, string> _basicTypes = new Dictionary<Type, string>
+        private static readonly Dictionary<Type, string> BasicTypes = new()
         {
             { typeof(void), "void" },
             { typeof(object), "object" },
@@ -40,7 +40,7 @@ namespace Cornucopia.DataStructures.Utils
 
             void Print(Type t)
             {
-                if (_basicTypes.TryGetValue(t, out var basic))
+                if (BasicTypes.TryGetValue(t, out var basic))
                 {
                     builder.Append(basic);
                     return;
