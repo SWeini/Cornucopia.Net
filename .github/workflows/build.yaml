@@ -21,6 +21,24 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       working-directory: ./src
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: ./src
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+      working-directory: ./src
+    - uses: actions/upload-artifact@v2
+      with:
+        name: nuget
+        path: ./src/**/*.nupkg
+
+  sonarcloud:
+  
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
     - name: SonarScanner
       uses: highbyte/sonarscan-dotnet@2.0
       with:
@@ -32,13 +50,3 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-      working-directory: ./src
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
-      working-directory: ./src
-    - uses: actions/upload-artifact@v2
-      with:
-        name: nuget
-        path: ./src/**/*.nupkg
