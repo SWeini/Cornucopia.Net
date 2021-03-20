@@ -30,6 +30,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: ./src
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: ./src
