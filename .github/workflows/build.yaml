@@ -10,7 +10,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -31,3 +30,22 @@ jobs:
       with:
         name: nuget
         path: ./src/**/*.nupkg
+
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: SonarScanner
+      uses: highbyte/sonarscan-dotnet@2.0
+      with:
+        sonarProjectKey: SWeini_Cornucopia.Net
+        sonarProjectName: Cornucopia.Net
+        sonarOrganization: sweini
+        dotnetBuildArguments: ./src
+        dotnetTestArguments: ./src --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+        sonarBeginArguments: /d:sonar.language="cs" /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml"
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
