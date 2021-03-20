@@ -46,8 +46,8 @@ jobs:
         sonarProjectName: Cornucopia.Net
         sonarOrganization: sweini
         dotnetBuildArguments: ./src
-        dotnetTestArguments: ./src --logger trx --collect:"Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+        dotnetTestArguments: ./src --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+        sonarBeginArguments: /d:sonar.verbose="true" /d:sonar.language="cs" /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml"
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
