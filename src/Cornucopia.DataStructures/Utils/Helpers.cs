@@ -1,7 +1,7 @@
-﻿namespace Cornucopia.DataStructures.Utils
-{
-    using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
+namespace Cornucopia.DataStructures.Utils
+{
     internal static class Helpers
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

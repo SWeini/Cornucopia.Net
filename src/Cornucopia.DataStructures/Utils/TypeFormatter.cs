@@ -1,12 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text;
 
 namespace Cornucopia.DataStructures.Utils
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     [ExcludeFromCodeCoverage]
     internal static class TypeFormatter
     {

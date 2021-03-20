@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Cornucopia.DataStructures
 {
-    internal static class BinaryHeapUtilies
+    internal static class BinaryHeapUtilities
     {
         public static int GetLeftChildIndex(int idx)
         {
