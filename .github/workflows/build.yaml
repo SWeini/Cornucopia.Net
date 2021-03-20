@@ -21,6 +21,15 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       working-directory: ./src
+    - name: SonarScanner
+      uses: highbyte/sonarscan-dotnet@2.0
+      with:
+        sonarProjectKey: SWeini_Cornucopia.Net
+        sonarProjectName: Cornucopia.Net
+        sonarOrganization: sweini
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: ./src
