@@ -57,7 +57,7 @@ namespace Cornucopia.DataStructures
         {
             var idx = this._elements.Length;
             this._elements.AddLast(item);
-            BinaryHeapUtilies.Up(this._elements.AsSpan(), idx, this._comparer);
+            BinaryHeapUtilities.Up(this._elements.AsSpan(), idx, this._comparer);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Cornucopia.DataStructures
             if (idx < this._elements.Length)
             {
                 this._elements[idx] = lastItem;
-                BinaryHeapUtilies.Down(this._elements.AsSpan(), idx, this._comparer);
+                BinaryHeapUtilities.Down(this._elements.AsSpan(), idx, this._comparer);
             }
 
             return item;
