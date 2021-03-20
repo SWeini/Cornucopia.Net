@@ -122,15 +122,12 @@ namespace Cornucopia.DataStructures
 
             LocateIndex(this._count - 1, out var blockIndex, out var elementIndex, out _);
 
-            if (elementIndex == 0)
+            if (elementIndex == 0 && blockIndex + 1 < this._blocks.Length)
             {
-                if (blockIndex + 1 < this._blocks.Length)
+                this._blocks[blockIndex + 1] = null;
+                if (blockIndex * 4 == this._blocks.Length)
                 {
-                    this._blocks[blockIndex + 1] = null;
-                    if (blockIndex * 4 == this._blocks.Length)
-                    {
-                        Array.Resize(ref this._blocks, blockIndex * 2);
-                    }
+                    Array.Resize(ref this._blocks, blockIndex * 2);
                 }
             }
 

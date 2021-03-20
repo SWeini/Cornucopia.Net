@@ -81,14 +81,11 @@ namespace Cornucopia.DataStructures.Persistent
             if (first != null)
             {
                 var second = first.Tail;
-                if (second != null)
+                if (second != null && first.Head.Count == second.Head.Count)
                 {
-                    if (first.Head.Count == second.Head.Count)
-                    {
-                        var combinedTree = BinaryTree.CreateNode(first.Head.Tree, second.Head.Tree, value);
-                        var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
-                        return new(new(second.Tail, combinedNode));
-                    }
+                    var combinedTree = BinaryTree.CreateNode(first.Head.Tree, second.Head.Tree, value);
+                    var combinedNode = new Node(combinedTree, first.Head.Count * 2 + 1);
+                    return new(new(second.Tail, combinedNode));
                 }
             }
 

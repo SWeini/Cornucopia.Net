@@ -1,6 +1,6 @@
 ﻿namespace System.Numerics
 {
-    public class BitOperations
+    public static class BitOperations
     {
         private static ReadOnlySpan<byte> Log2DeBruijn => new byte[]
         {

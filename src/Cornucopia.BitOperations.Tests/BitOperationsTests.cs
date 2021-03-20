@@ -38,5 +38,17 @@ namespace Cornucopia.BitOperations.Tests
         {
             Assert.That(Log2(ulong.MaxValue), Is.EqualTo(63));
         }
+
+        [Test]
+        public void Log2_Zero64_ReturnsZero()
+        {
+            Assert.That(Log2(0UL), Is.Zero);
+        }
+
+        [Test]
+        public void Log2_One64_ReturnsZero()
+        {
+            Assert.That(Log2(1UL), Is.Zero);
+        }
     }
 }

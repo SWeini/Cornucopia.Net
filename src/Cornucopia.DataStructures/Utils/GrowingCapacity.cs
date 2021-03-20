@@ -1,6 +1,6 @@
 ﻿namespace Cornucopia.DataStructures.Utils
 {
-    internal class GrowingCapacity
+    internal static class GrowingCapacity
     {
         public const int DefaultCapacity = 4;
 
