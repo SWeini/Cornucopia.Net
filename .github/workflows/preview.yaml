@@ -1,6 +1,7 @@
 name: .NET Pack & Push
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -21,7 +22,12 @@ jobs:
       run: dotnet restore
       working-directory: ./src
     - name: Build
-      run: dotnet build --configuration Release --no-restore --version-suffix $VERSION_SUFFIX
+      run: dotnet build --no-restore --version-suffix $VERSION_SUFFIX
+      working-directory: ./src
+    - name: Create external annotations
+      run: |
+        dotnet run --no-build --project JetBrains.Annotations.Extractor -- Cornucopia.DataStructures/bin/Debug/netcoreapp3.1/Cornucopia.DataStructures.dll Cornucopia.DataStructures/bin/Release/netcoreapp3.1/Cornucopia.DataStructures.ExternalAnnotations.xml
+        dotnet run --no-build --project JetBrains.Annotations.Extractor -- Cornucopia.DataStructures/bin/Debug/netstandard1.1/Cornucopia.DataStructures.dll Cornucopia.DataStructures/bin/Release/netstandard1.1/Cornucopia.DataStructures.ExternalAnnotations.xml
       working-directory: ./src
     - name: Pack
       run: dotnet pack --configuration Release --no-build --version-suffix $VERSION_SUFFIX
