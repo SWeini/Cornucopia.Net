@@ -8,21 +8,24 @@ namespace JetBrains.Annotations.Extractor
 {
     public class AnnotationCreator
     {
+        public XmlDocument Document { get; }
         private readonly XmlElement _rootElement;
 
-        public AnnotationCreator(XmlElement rootElement)
+        public AnnotationCreator()
         {
-            this._rootElement = rootElement;
+            this.Document = new();
+            this._rootElement = this.Document.CreateElement("assembly");
         }
-
-        private XmlDocument Document => this._rootElement.OwnerDocument!;
 
         public void ProcessAssembly(Assembly assembly)
         {
+            this._rootElement.SetAttribute("name", assembly.GetName().Name);
             foreach (var type in assembly.GetExportedTypes())
             {
                 this.ProcessType(type);
             }
+
+            this.Document.AppendChild(this._rootElement);
         }
 
         private void ProcessType(Type type)

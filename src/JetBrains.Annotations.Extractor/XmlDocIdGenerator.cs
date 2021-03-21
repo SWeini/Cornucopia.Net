@@ -12,7 +12,7 @@ namespace JetBrains.Annotations.Extractor
         {
             var result = new StringBuilder();
             result.Append("M:");
-            PrintType(method.DeclaringType!, result);
+            PrintType(method.DeclaringType!, result, true);
             result.Append('.');
             result.Append(method.Name.Replace('.', '#'));
             if (method.IsGenericMethodDefinition)
@@ -42,8 +42,9 @@ namespace JetBrains.Annotations.Extractor
             return result.ToString();
         }
 
-        private static void PrintType(Type type, StringBuilder builder)
+        private static void PrintType(Type type, StringBuilder builder, bool isTypeDefinition = false)
         {
+            var genericArguments = type.GetGenericArguments();
             var numProcessedGenericArguments = 0;
             Print(type);
 
@@ -73,8 +74,11 @@ namespace JetBrains.Annotations.Extractor
                 if (t.IsArray)
                 {
                     Print(t.GetElementType()!);
-                    builder.Append('[');
-                    builder.Append(',', t.GetArrayRank() - 1);
+                    builder.Append("[0:");
+                    for (var i = 1; i < t.GetArrayRank(); i++)
+                    {
+                        builder.Append(",0:");
+                    }
                     builder.Append(']');
                     return;
                 }
@@ -108,21 +112,21 @@ namespace JetBrains.Annotations.Extractor
                     }
                 }
 
-                if (t.IsGenericType && !type.IsGenericTypeDefinition)
+                if (t.IsGenericType && !isTypeDefinition)
                 {
-                    var genericArguments = t.GetGenericArguments();
-                    if (genericArguments.Length > numProcessedGenericArguments)
+                    var genericArgumentsLength = t.GetGenericArguments().Length;
+                    if (genericArgumentsLength > numProcessedGenericArguments)
                     {
                         builder.Append(t.Name.Split(new[] { '`' }, 2)[0]);
                         builder.Append('{');
                         Print(genericArguments[numProcessedGenericArguments]);
-                        for (var i = numProcessedGenericArguments + 1; i < genericArguments.Length; i++)
+                        for (var i = numProcessedGenericArguments + 1; i < genericArgumentsLength; i++)
                         {
                             builder.Append(',');
                             Print(genericArguments[i]);
                         }
 
-                        numProcessedGenericArguments = genericArguments.Length;
+                        numProcessedGenericArguments = genericArgumentsLength;
                         builder.Append('}');
                     }
                     else

@@ -139,6 +139,13 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [Test]
+        public void Reverse_Empty_IsEmpty()
+        {
+            var list = LinkedList<int>.Empty.Reverse();
+            Assert.That(list.IsEmpty, Is.True);
+        }
+
+        [Test]
         public void Reverse_SingleElement_IsSameSequence()
         {
             var list = LinkedList.Create(42).Reverse();
@@ -161,6 +168,14 @@ namespace Cornucopia.DataStructures.Persistent
             var elements = new List<int>();
             list.ForEach(elements.Add);
             Assert.That(elements, Is.EqualTo(new[] { 42, 10, 0 }));
+        }
+
+        [Test]
+        public void Count_Empty_IsZero()
+        {
+            var list = LinkedList<int>.Empty;
+            var count = list.Count();
+            Assert.That(count, Is.Zero);
         }
 
         [Test]
