@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Cornucopia.DataStructures
 {
     [TestFixture]
-    public class DynamicArrayFreeListAllocator
+    public class DynamicArrayFreeListAllocatorTests
     {
         [Test]
         public void Ctor_CountIsZero()
