@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,7 +11,7 @@ namespace Jetbrains.Annotations.Extractor
         {
             var result = new StringBuilder();
             result.Append("M:");
-            Build(method.DeclaringType!, result);
+            PrintType(method.DeclaringType!, result);
             result.Append('.');
             result.Append(method.Name.Replace('.', '#'));
             if (method.IsGenericMethodDefinition)
@@ -20,16 +19,15 @@ namespace Jetbrains.Annotations.Extractor
                 result.Append("``");
                 result.Append(method.GetGenericArguments().Length);
             }
-            var genericArguments = BuildGenericTypes(method);
             var parameters = method.GetParameters();
             if (parameters.Any())
             {
                 result.Append('(');
-                Build(parameters[0].ParameterType, result, genericArguments);
+                PrintType(parameters[0].ParameterType, result);
                 for (var i = 1; i < parameters.Length; i++)
                 {
                     result.Append(',');
-                    Build(parameters[i].ParameterType, result, genericArguments);
+                    PrintType(parameters[i].ParameterType, result);
                 }
                 result.Append(')');
             }
@@ -37,125 +35,105 @@ namespace Jetbrains.Annotations.Extractor
             if (method.IsSpecialName && (method.Name == "op_Implicit" || method.Name == "op_Explicit"))
             {
                 result.Append('~');
-                Build(((MethodInfo) method).ReturnType, result, genericArguments);
+                PrintType(((MethodInfo) method).ReturnType, result);
             }
 
             return result.ToString();
         }
 
-        private static Dictionary<Type, string> BuildGenericTypes(MethodBase method)
+        private static void PrintType(Type type, StringBuilder builder)
         {
-            var result = new Dictionary<Type, string>();
+            var generic = type.GenericTypeArguments;
+            var genericStart = 0;
+            Print(type);
 
-            if (method.IsGenericMethodDefinition)
+            void Print(Type t)
             {
-                var genericArguments = method.GetGenericArguments();
-                for (var i = 0; i < genericArguments.Length; i++)
+                if (t.IsPointer)
                 {
-                    result.Add(genericArguments[i], $"``{i}");
+                    Print(t.GetElementType()!);
+                    builder.Append('*');
+                    return;
                 }
-            }
 
-            var type = method.DeclaringType!;
-            if (type.IsGenericTypeDefinition)
-            {
-                var genericArguments = type.GetGenericArguments();
-                for (var i = 0; i < genericArguments.Length; i++)
+                if (t.IsByRef)
                 {
-                    result.Add(genericArguments[i], $"`{i}");
+                    Print(t.GetElementType()!);
+                    builder.Append('@');
+                    return;
                 }
-            }
-            return result;
-        }
 
-        private static void Build(Type type, StringBuilder str)
-        {
-            if (type.IsNested)
-            {
-                Build(type.DeclaringType!, str);
-                str.Append('.');
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(type.Namespace))
+                if (t.IsSZArray)
                 {
-                    str.Append(type.Namespace);
-                    str.Append('.');
+                    Print(t.GetElementType()!);
+                    builder.Append("[]");
+                    return;
                 }
-            }
 
-            str.Append(type.Name);
-        }
-
-        private static void Build(Type type, StringBuilder str, Dictionary<Type, string> genericTypes)
-        {
-            if (type.IsPointer)
-            {
-                Build(type.GetElementType()!, str, genericTypes);
-                str.Append('*');
-                return;
-            }
-
-            if (type.IsByRef)
-            {
-                Build(type.GetElementType()!, str, genericTypes);
-                str.Append('@');
-                return;
-            }
-
-            if (type.IsSZArray)
-            {
-                Build(type.GetElementType()!, str, genericTypes);
-                str.Append("[]");
-                return;
-            }
-
-            if (type.IsArray)
-            {
-                Build(type.GetElementType()!, str, genericTypes);
-                str.Append('[');
-                str.Append(',', type.GetArrayRank() - 1);
-                str.Append(']');
-                return;
-            }
-
-            if (genericTypes.TryGetValue(type, out var genericType))
-            {
-                str.Append(genericType);
-                return;
-            }
-
-            if (type.IsNested)
-            {
-                Build(type.DeclaringType!, str, genericTypes);
-                str.Append('.');
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(type.Namespace))
+                if (t.IsArray)
                 {
-                    str.Append(type.Namespace);
-                    str.Append('.');
+                    Print(t.GetElementType()!);
+                    builder.Append('[');
+                    builder.Append(',', t.GetArrayRank() - 1);
+                    builder.Append(']');
+                    return;
                 }
-            }
 
-            if (type.IsConstructedGenericType)
-            {
-                var name = type.Name.Split('`', 2)[0];
-                str.Append(name);
-                str.Append('{');
-                var genericArguments = type.GenericTypeArguments;
-                Build(genericArguments[0], str, genericTypes);
-                for (var i = 1; i < genericArguments.Length; i++)
+                if (t.IsGenericTypeParameter)
                 {
-                    str.Append(',');
-                    Build(genericArguments[1], str, genericTypes);
+                    builder.Append('`');
+                    builder.Append(t.GenericParameterPosition);
+                    return;
                 }
-                str.Append('}');
-            }
-            else
-            {
-                str.Append(type.Name);
+
+                if (t.IsGenericMethodParameter)
+                {
+                    builder.Append("``");
+                    builder.Append(t.GenericParameterPosition);
+                    return;
+                }
+
+                if (t.IsNested)
+                {
+                    Print(t.DeclaringType!);
+                    builder.Append('.');
+                }
+                else
+                {
+                    var ns = t.Namespace;
+                    if (!string.IsNullOrEmpty(ns))
+                    {
+                        builder.Append(ns);
+                        builder.Append('.');
+                    }
+                }
+
+                if (t.IsGenericType && !type.IsGenericTypeDefinition)
+                {
+                    var genericLength = t.GetGenericArguments().Length;
+                    if (genericLength > genericStart)
+                    {
+                        builder.Append(t.Name.Split(new[] { '`' }, 2)[0]);
+                        builder.Append('{');
+                        Print(generic[genericStart]);
+                        for (var i = genericStart + 1; i < genericLength; i++)
+                        {
+                            builder.Append(',');
+                            Print(generic[i]);
+                        }
+
+                        genericStart = genericLength;
+                        builder.Append('}');
+                    }
+                    else
+                    {
+                        builder.Append(t.Name);
+                    }
+                }
+                else
+                {
+                    builder.Append(t.Name);
+                }
             }
         }
     }
