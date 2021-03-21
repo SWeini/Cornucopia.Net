@@ -1,9 +1,6 @@
-name: dotnet package
+name: dotnet pack & push
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
@@ -11,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VERSION_SUFFIX: -preview.${{ github.run_number }}
+      NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core SDK 5.0
@@ -21,17 +21,17 @@ jobs:
       run: dotnet restore
       working-directory: ./src
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore --version-suffix $VERSION_SUFFIX
+      working-directory: ./src
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --version-suffix $VERSION_SUFFIX --output __out
       working-directory: ./src
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --configuration Release --no-build --verbosity normal
       working-directory: ./src
-    - uses: actions/upload-artifact@v2
-      with:
-        name: nuget
-        path: |
-          ./src/**/*.nupkg
-          ./src/**/*.snupkg
+    - name: NuGet Push
+      run: dotnet nuget push **/*.nupkg --source NuGet.org --api-key $NUGET_TOKEN
+      working-directory: ./src
 
   sonarcloud:
     runs-on: ubuntu-latest

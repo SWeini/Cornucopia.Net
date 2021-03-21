@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.2.0$(VersionSuffix)</Version>
     <Description>Shim for System.Numerics.BitOperations</Description>
     <PackageTags>shim bitoperations</PackageTags>
   </PropertyGroup>

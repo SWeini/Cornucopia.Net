@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Cornucopia.DataStructures.xml</DocumentationFile>
-    <Version>0.1.0</Version>
+    <Version>0.2.0$(VersionSuffix)</Version>
     <Description>A .NET library containing various data structures and algorithms, such as random-access lists and finger trees.</Description>
     <PackageTags>datastructures collections algorithms</PackageTags>
   </PropertyGroup>
