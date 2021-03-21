@@ -24,11 +24,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore --version-suffix $VERSION_SUFFIX
       working-directory: ./src
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --version-suffix $VERSION_SUFFIX --output __out
+      run: dotnet pack --configuration Release --no-build --version-suffix $VERSION_SUFFIX
       working-directory: ./src
     - name: Test
       run: dotnet test --configuration Release --no-build --verbosity normal
       working-directory: ./src
     - name: NuGet Push
-      run: dotnet nuget push **/*.nupkg --source NuGet.org --api-key $NUGET_TOKEN
+      run: dotnet nuget push **/*.nupkg --source NuGet.org --api-key $NUGET_TOKEN --skip-duplicate
       working-directory: ./src
