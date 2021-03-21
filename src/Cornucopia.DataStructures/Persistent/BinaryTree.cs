@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 namespace Cornucopia.DataStructures.Persistent
 {
     /// <summary>
@@ -94,7 +96,7 @@ namespace Cornucopia.DataStructures.Persistent
         ///     Performs the specified action on each element of the tree, using a pre-order traversal.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-        public void ForEachPreOrder(Action<T> action)
+        public void ForEachPreOrder([InstantHandle] Action<T> action)
         {
             this._root?.ForEachPreOrder(action);
         }
@@ -103,7 +105,7 @@ namespace Cornucopia.DataStructures.Persistent
         ///     Performs the specified action on each element of the tree, using an in-order traversal.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-        public void ForEachInOrder(Action<T> action)
+        public void ForEachInOrder([InstantHandle] Action<T> action)
         {
             this._root?.ForEachInOrder(action);
         }
@@ -112,7 +114,7 @@ namespace Cornucopia.DataStructures.Persistent
         ///     Performs the specified action on each element of the tree, using a post-order traversal.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-        public void ForEachPostOrder(Action<T> action)
+        public void ForEachPostOrder([InstantHandle] Action<T> action)
         {
             this._root?.ForEachPostOrder(action);
         }

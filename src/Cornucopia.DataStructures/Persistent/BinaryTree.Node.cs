@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 namespace Cornucopia.DataStructures.Persistent
 {
     partial struct BinaryTree<T>
@@ -40,7 +42,7 @@ namespace Cornucopia.DataStructures.Persistent
             ///     Performs the specified action on each element of the tree, using a pre-order traversal.
             /// </summary>
             /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-            public void ForEachPreOrder(Action<T> action)
+            public void ForEachPreOrder([InstantHandle] Action<T> action)
             {
                 action(this.Value);
                 this.LeftChild?.ForEachPreOrder(action);
@@ -51,7 +53,7 @@ namespace Cornucopia.DataStructures.Persistent
             ///     Performs the specified action on each element of the tree, using an in-order traversal.
             /// </summary>
             /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-            public void ForEachInOrder(Action<T> action)
+            public void ForEachInOrder([InstantHandle] Action<T> action)
             {
                 this.LeftChild?.ForEachInOrder(action);
                 action(this.Value);
@@ -62,7 +64,7 @@ namespace Cornucopia.DataStructures.Persistent
             ///     Performs the specified action on each element of the tree, using a post-order traversal.
             /// </summary>
             /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the tree.</param>
-            public void ForEachPostOrder(Action<T> action)
+            public void ForEachPostOrder([InstantHandle] Action<T> action)
             {
                 this.LeftChild?.ForEachPostOrder(action);
                 this.RightChild?.ForEachPostOrder(action);

@@ -5,14 +5,22 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Cornucopia.DataStructures.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Version>0.2.0$(VersionSuffix)</Version>
     <Description>A .NET library containing various data structures and algorithms, such as random-access lists and finger trees.</Description>
     <PackageTags>datastructures collections algorithms</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
     <ProjectReference Include="..\Cornucopia.BitOperations\Cornucopia.BitOperations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/*/*.ExternalAnnotations.xml" Pack="true" PackagePath="lib/" />
   </ItemGroup>
 
 </Project>

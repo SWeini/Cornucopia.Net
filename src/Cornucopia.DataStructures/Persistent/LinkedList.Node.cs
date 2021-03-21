@@ -36,7 +36,7 @@ namespace Cornucopia.DataStructures.Persistent
             ///     Performs the specified action on each element of the list.
             /// </summary>
             /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the list.</param>
-            public void ForEach(Action<T> action)
+            public void ForEach([InstantHandle] Action<T> action)
             {
                 var node = this;
                 do
