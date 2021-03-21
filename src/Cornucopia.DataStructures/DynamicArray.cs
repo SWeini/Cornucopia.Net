@@ -26,7 +26,7 @@ namespace Cornucopia.DataStructures
         {
             Debug.Assert(initialize);
             this._array = ArrayTools.Empty<T>();
-            this.Length = 0;
+            this._length = 0;
         }
 
         /// <summary>
@@ -42,16 +42,51 @@ namespace Cornucopia.DataStructures
             }
 
             this._array = capacity == 0 ? ArrayTools.Empty<T>() : new T[capacity];
-            this.Length = 0;
+            this._length = 0;
         }
 
         private T[] _array;
+        private int _length;
 
         /// <summary>
         ///     Gets the number of elements contained in the list.
         /// </summary>
         /// <value>The number of elements in the list.</value>
-        public int Length { get; private set; }
+        public int Length
+        {
+            readonly get => this._length;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                }
+
+                if (value < this._length)
+                {
+                    if (Helpers.MayBeReferenceOrContainReferences<T>())
+                    {
+                        Array.Clear(this._array, value, this._length - value);
+                    }
+
+                    this._length = value;
+                    return;
+                }
+
+                if (value > this._array.Length)
+                {
+                    var newItems = new T[value];
+                    if (this._length > 0)
+                    {
+                        Array.Copy(this._array, newItems, this._length);
+                    }
+
+                    this._array = newItems;
+                }
+
+                this._length = value;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the capacity of this list.
@@ -62,7 +97,7 @@ namespace Cornucopia.DataStructures
             readonly get => this._array.Length;
             set
             {
-                if (value < this.Length)
+                if (value < this._length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value));
                 }
@@ -72,9 +107,9 @@ namespace Cornucopia.DataStructures
                     if (value > 0)
                     {
                         var newItems = new T[value];
-                        if (this.Length > 0)
+                        if (this._length > 0)
                         {
-                            Array.Copy(this._array, newItems, this.Length);
+                            Array.Copy(this._array, newItems, this._length);
                         }
                         this._array = newItems;
                     }
@@ -97,7 +132,7 @@ namespace Cornucopia.DataStructures
         {
             get
             {
-                if ((uint) index >= (uint) this.Length)
+                if ((uint) index >= (uint) this._length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
@@ -113,8 +148,8 @@ namespace Cornucopia.DataStructures
         {
             if (Helpers.MayBeReferenceOrContainReferences<T>())
             {
-                var size = this.Length;
-                this.Length = 0;
+                var size = this._length;
+                this._length = 0;
                 if (size > 0)
                 {
                     Array.Clear(this._array, 0, size);
@@ -122,7 +157,7 @@ namespace Cornucopia.DataStructures
             }
             else
             {
-                this.Length = 0;
+                this._length = 0;
             }
         }
 
@@ -134,11 +169,11 @@ namespace Cornucopia.DataStructures
         public void AddLast(T item)
         {
             var array = this._array;
-            var size = this.Length;
+            var size = this._length;
             if (size < array.Length)
             {
                 array[size] = item;
-                this.Length = size + 1;
+                this._length = size + 1;
             }
             else
             {
@@ -149,17 +184,17 @@ namespace Cornucopia.DataStructures
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void AddWithResize(T item)
         {
-            var size = this.Length;
+            var size = this._length;
             var newSize = GrowingCapacity.Grow(size, size + 1);
             var newItems = new T[newSize];
             if (size > 0)
             {
-                Array.Copy(this._array, newItems, this.Length);
+                Array.Copy(this._array, newItems, this._length);
             }
 
             this._array = newItems;
             newItems[size] = item;
-            this.Length = size + 1;
+            this._length = size + 1;
         }
 
         /// <summary>
@@ -169,20 +204,44 @@ namespace Cornucopia.DataStructures
         /// <exception cref="InvalidOperationException">The list is empty.</exception>
         public T RemoveLast()
         {
-            var newLength = this.Length - 1;
+            var newLength = this._length - 1;
             if (newLength < 0)
             {
                 throw new InvalidOperationException("The list is empty.");
             }
 
             var result = this._array[newLength];
-            this.Length = newLength;
+            this._length = newLength;
             if (Helpers.MayBeReferenceOrContainReferences<T>())
             {
                 this._array[newLength] = default!;
             }
 
             return result;
+        }
+
+        /// <summary>
+        ///     Extracts the last element from the list.
+        /// </summary>
+        /// <param name="item">The last element of the list</param>
+        /// <returns><c>true</c> if an element was removed from the list; otherwise, <c>false</c>.</returns>
+        public bool TryRemoveLast([MaybeNullWhen(false)] out T item)
+        {
+            var newLength = this._length - 1;
+            if (newLength < 0)
+            {
+                item = default;
+                return false;
+            }
+
+            item = this._array[newLength];
+            this._length = newLength;
+            if (Helpers.MayBeReferenceOrContainReferences<T>())
+            {
+                this._array[newLength] = default!;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -193,7 +252,7 @@ namespace Cornucopia.DataStructures
         [Pure]
         public readonly Span<T> AsSpan()
         {
-            return new(this._array, 0, this.Length);
+            return new(this._array, 0, this._length);
         }
 
         [ExcludeFromCodeCoverage]
