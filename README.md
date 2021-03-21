@@ -2,6 +2,7 @@
 
 [![GitHub top language](https://img.shields.io/github/languages/top/SWeini/Cornucopia.Net)](https://docs.microsoft.com/dotnet/csharp/)
 [![Nuget Cornucopia.DataStructures](https://img.shields.io/nuget/v/Cornucopia.DataStructures?label=Cornucopia.DataStructures&logo=nuget)](https://www.nuget.org/packages/Cornucopia.DataStructures/)
+[![Nuget Cornucopia.DataStructures](https://img.shields.io/nuget/vpre/Cornucopia.DataStructures?label=Cornucopia.DataStructures&logo=nuget)](https://www.nuget.org/packages/Cornucopia.DataStructures/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/pulls)
 [![GitHub issues](https://img.shields.io/github/issues/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/issues)
