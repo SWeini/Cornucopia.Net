@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cornucopia.DataStructures\Cornucopia.DataStructures.csproj" />
-    <ProjectReference Include="..\Jetbrains.Annotations.Extractor\Jetbrains.Annotations.Extractor.csproj" />
   </ItemGroup>
 
 </Project>
