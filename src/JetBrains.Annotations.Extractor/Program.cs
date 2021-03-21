@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace JetBrains.Annotations.Extractor
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
