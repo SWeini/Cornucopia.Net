@@ -3,10 +3,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Jetbrains.Annotations.Extractor
+namespace JetBrains.Annotations.Extractor
 {
     public static class XmlDocIdGenerator
     {
+        [Pure]
         public static string GetId(MethodBase method)
         {
             var result = new StringBuilder();
