@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Cornucopia.BitOperations\Cornucopia.BitOperations.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/*/*.ExternalAnnotations.xml" Pack="true" PackagePath="lib/" />
+  </ItemGroup>
+
 </Project>
