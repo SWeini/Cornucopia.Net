@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 using Cornucopia.DataStructures.Utils;
+
+using JetBrains.Annotations;
 
 namespace Cornucopia.DataStructures
 {
