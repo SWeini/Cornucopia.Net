@@ -5,7 +5,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/pulls)
 [![GitHub issues](https://img.shields.io/github/issues/SWeini/Cornucopia.Net?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/issues)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWeini/Cornucopia.Net/dotnet%20package/master?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/actions/workflows/build.yaml?query=branch%3Amaster)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWeini/Cornucopia.Net/.NET%20Pack%20&%20Push/master?logo=GitHub)](https://github.com/SWeini/Cornucopia.Net/actions/workflows/preview.yaml?query=branch%3Amaster)
 [![Sonar Coverage](https://img.shields.io/sonar/coverage/SWeini_Cornucopia.Net?server=https%3A%2F%2Fsonarcloud.io&logo=SonarCloud)](https://sonarcloud.io/component_measures?id=SWeini_Cornucopia.Net&metric=coverage)
 [![GitHub](https://img.shields.io/github/license/SWeini/Cornucopia.Net)](https://github.com/SWeini/Cornucopia.Net/blob/master/LICENSE)
 
