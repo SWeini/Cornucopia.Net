@@ -11,6 +11,10 @@
     <PackageTags>datastructures collections algorithms</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
     <ProjectReference Include="..\Cornucopia.BitOperations\Cornucopia.BitOperations.csproj" />
   </ItemGroup>

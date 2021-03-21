@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FDB5AD44-1DB2-4A22-9260-44887F6CD409}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jetbrains.Annotations.Extractor", "Jetbrains.Annotations.Extractor\Jetbrains.Annotations.Extractor.csproj", "{0E9438E2-ADED-409B-A46E-60969F1582C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{79F26457-FECB-4D18-A5AA-DF1D79D8C767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79F26457-FECB-4D18-A5AA-DF1D79D8C767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79F26457-FECB-4D18-A5AA-DF1D79D8C767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E9438E2-ADED-409B-A46E-60969F1582C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E9438E2-ADED-409B-A46E-60969F1582C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E9438E2-ADED-409B-A46E-60969F1582C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E9438E2-ADED-409B-A46E-60969F1582C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +60,7 @@ Global
 		{FD049222-5917-4B84-87DA-E57D6FC41A75} = {C2F78093-E682-42D9-A645-33726356FBDE}
 		{11834771-C307-44E5-8E7A-6F703D29B6BF} = {65809F83-98E0-4ECE-B697-2A86E4DF2D6C}
 		{79F26457-FECB-4D18-A5AA-DF1D79D8C767} = {65809F83-98E0-4ECE-B697-2A86E4DF2D6C}
+		{0E9438E2-ADED-409B-A46E-60969F1582C9} = {FDB5AD44-1DB2-4A22-9260-44887F6CD409}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99181DA4-46E9-4358-A48B-279DEE9022D7}
