@@ -1,0 +1,34 @@
+name: .NET Pack & Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VERSION_SUFFIX: -preview.${{ github.run_number }}
+      NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core SDK 5.0
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: '5.0.x'
+    - name: Install dependencies
+      run: dotnet restore
+      working-directory: ./src
+    - name: Build
+      run: dotnet build --configuration Release --no-restore --version-suffix $VERSION_SUFFIX
+      working-directory: ./src
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --version-suffix $VERSION_SUFFIX --output __out
+      working-directory: ./src
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
+      working-directory: ./src
+    - name: NuGet Push
+      run: dotnet nuget push **/*.nupkg --source NuGet.org --api-key $NUGET_TOKEN
+      working-directory: ./src
