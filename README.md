@@ -36,42 +36,48 @@ These decisions focus on performance, but do not prevent creating a wrapper arou
 
 </details>
 
-### Random Access List
+### [Random Access List](https://en.wikipedia.org/wiki/Purely_functional_data_structure#Examples)
 Persistent data structure based on skew binary numbers.
 - **O(1)** insert/delete on one end (like `System.Collections.Immutable.ImmutableStack<T>`)
 - **O(log(N))** get/set by index (like `System.Collections.Immutable.ImmutableList<T>`)
 
-### Finger Tree
+### [Finger Tree](https://en.wikipedia.org/wiki/Finger_tree)
 Persistent data structure based on a 2-3-tree, combined with a zipper.
 - **O(1) amortized** insert/delete on both ends
 - **O(log(N))** insert/delete/get/set by index (like `System.Collections.Immutable.ImmutableList<T>`)
 - **O(log(N))** concatenate (like `System.Collections.Immutable.ImmutableList<T>`)
 - **O(log(N))** split (in comparison to **O(N*log(N))** for `System.Collections.Immutable.ImmutableList<T>`)
 
-### Space-Optimal Dynamic Array
+### [Space-Optimal Dynamic Array](https://en.wikipedia.org/wiki/Hashed_array_tree#cite_ref-7)
 Ephemeral data structure for dynamic arrays.
 - **O(1) amortized** insert/delete on one end (like `System.Collections.Generic.List<T>`)
 - data not copied when resizing (unlike `System.Collections.Generic.List<T>`)
 - **O(1)** get/set by index
 - **O(sqrt(N))** wasted space (in comparison to **O(n)** for `System.Collections.Generic.List<T>`)
 
-### Binary Heap
+### [Binary Heap](https://en.wikipedia.org/wiki/Binary_heap)
 Ephemeral data structure for priority queues.
 - **O(log(N))** insert (like `System.Collections.Generic.SortedSet<T>`)
 - **O(1)** get minimum (in comparison to **O(log(N))** for `System.Collections.Generic.SortedSet<T>`)
 - **O(log(N))** extract minimum (like `System.Collections.Generic.SortedSet<T>`)
 - data can contain duplicates (unlike `System.Collections.Generic.SortedSet<T>`)
 
-### Dynamic Array
+### [Dynamic Array](https://en.wikipedia.org/wiki/Dynamic_array)
 Ephemeral data structure for dynamic arrays, used internally.
 - like `System.Collections.Generic.List<T>`
 - access by `ref` and `System.Span<T>`
 - value type allows embedding in other data types without too much performance penalties
 
-### Persistent Binary Tree
+### Undirected / Directional / Bidirectional [multigraph](https://en.wikipedia.org/wiki/Multigraph)
+Ephemeral data structure for graphs.
+- stored in a compact array-based format
+- [Dijkstra's shortest path](https://en.wikipedia.org/wiki/Dijkstra's_algorithm)
+- [Tarjan's strongly connected components](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
+
+### Persistent [Binary Tree](https://en.wikipedia.org/wiki/Binary_tree)
 Persistent data structure for binary trees, used internally.
 
-### Persistent Singly Linked List
+### Persistent [Singly Linked List](https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list)
 Persistent data structure for linked lists, used internally, similar to `System.Collections.Immutable.ImmutableStack<T>`.
 
 ## Future Plans
@@ -85,7 +91,7 @@ Currently I'm thinking about these additions (in no particular order), many of w
 - More Heaps (Binomial / Fibonacci / Weak / MinMax)
 - (Persistent / Concurrent) Hash Array Mapped Trie
 - RRB Vector
-- Graphs (Undirected / Directed) with most basic algorithms (e.g. spanning tree, strongly connected components, shortest path)
+- More algorithms for graphs (e.g. spanning tree)
 - Prefix Trie
 - Suffix Tree
 

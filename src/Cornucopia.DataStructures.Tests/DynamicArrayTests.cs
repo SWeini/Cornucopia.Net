@@ -37,6 +37,67 @@ namespace Cornucopia.DataStructures
         }
 
         [Test]
+        public void SetLength_EmptyToHigher_LengthIsCorrect()
+        {
+            var arr = new DynamicArray<int>(true);
+            arr.Length = 42;
+            Assert.That(arr.Length, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void SetLength_Negative_Throws()
+        {
+            var arr = new DynamicArray<int>(true);
+            Assert.That(() => arr.Length = -1, Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [Test]
+        public void SetLength_NonEmptyGrowInsideCapacity_PreservesContent()
+        {
+            var arr = new DynamicArray<int>(4);
+            arr.AddLast(42);
+            arr.Length = 3;
+            Assert.That(arr[0], Is.EqualTo(42));
+        }
+
+        [Test]
+        public void SetLength_NonEmptyGrowInsideCapacity_PreservesCapacity()
+        {
+            var arr = new DynamicArray<int>(42);
+            arr.Length = 13;
+            Assert.That(arr.Capacity, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void SetLength_NonEmptyShrink_PreservesContent()
+        {
+            var arr = new DynamicArray<int>(4);
+            arr.AddLast(42);
+            arr.AddLast(13);
+            arr.AddLast(5);
+            arr.Length = 1;
+            Assert.That(arr[0], Is.EqualTo(42));
+        }
+
+        [Test]
+        public void SetLength_ReferenceTypesShrink_DoesNotHoldOnToReferences()
+        {
+            var weakReference = Initialize();
+            GC.Collect();
+            Assert.That(weakReference.TryGetTarget(out _), Is.False);
+
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            static WeakReference<object> Initialize()
+            {
+                var obj = new object();
+                var arr = new DynamicArray<object>(true);
+                arr.AddLast(obj);
+                arr.Length = 0;
+                return new(obj);
+            }
+        }
+
+        [Test]
         public void SetCapacity_EmptyToHigher_CapacityIsCorrect()
         {
             var arr = new DynamicArray<int>(true);
@@ -226,6 +287,48 @@ namespace Cornucopia.DataStructures
                 var arr = new DynamicArray<object>(true);
                 arr.AddLast(obj);
                 arr.RemoveLast();
+                return new(obj);
+            }
+        }
+
+        [Test]
+        public void TryRemoveList_Empty_ReturnsFalse()
+        {
+            var arr = new DynamicArray<int>(true);
+            Assert.That(arr.TryRemoveLast(out _), Is.False);
+        }
+
+        [Test]
+        public void TryRemoveLast_NonEmpty_ReturnsTrue()
+        {
+            var arr = new DynamicArray<int>(true);
+            arr.AddLast(0);
+            Assert.That(arr.TryRemoveLast(out _), Is.True);
+        }
+
+        [Test]
+        public void TryRemoveLast_NonEmpty_ExtractsValue()
+        {
+            var arr = new DynamicArray<int>(true);
+            arr.AddLast(42);
+            arr.TryRemoveLast(out var lastItem);
+            Assert.That(lastItem, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void TryRemoveLast_ReferenceTypes_DoesNotHoldOnToReferences()
+        {
+            var weakReference = Initialize();
+            GC.Collect();
+            Assert.That(weakReference.TryGetTarget(out _), Is.False);
+
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            static WeakReference<object> Initialize()
+            {
+                var obj = new object();
+                var arr = new DynamicArray<object>(true);
+                arr.AddLast(obj);
+                arr.TryRemoveLast(out _);
                 return new(obj);
             }
         }
