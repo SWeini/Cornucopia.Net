@@ -3,10 +3,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Jetbrains.Annotations.Extractor
+namespace JetBrains.Annotations.Extractor
 {
     public static class XmlDocIdGenerator
     {
+        [Pure]
         public static string GetId(MethodBase method)
         {
             var result = new StringBuilder();
@@ -43,8 +44,7 @@ namespace Jetbrains.Annotations.Extractor
 
         private static void PrintType(Type type, StringBuilder builder)
         {
-            var generic = type.GenericTypeArguments;
-            var genericStart = 0;
+            var numProcessedGenericArguments = 0;
             Print(type);
 
             void Print(Type t)
@@ -110,19 +110,19 @@ namespace Jetbrains.Annotations.Extractor
 
                 if (t.IsGenericType && !type.IsGenericTypeDefinition)
                 {
-                    var genericLength = t.GetGenericArguments().Length;
-                    if (genericLength > genericStart)
+                    var genericArguments = t.GetGenericArguments();
+                    if (genericArguments.Length > numProcessedGenericArguments)
                     {
                         builder.Append(t.Name.Split(new[] { '`' }, 2)[0]);
                         builder.Append('{');
-                        Print(generic[genericStart]);
-                        for (var i = genericStart + 1; i < genericLength; i++)
+                        Print(genericArguments[numProcessedGenericArguments]);
+                        for (var i = numProcessedGenericArguments + 1; i < genericArguments.Length; i++)
                         {
                             builder.Append(',');
-                            Print(generic[i]);
+                            Print(genericArguments[i]);
                         }
 
-                        genericStart = genericLength;
+                        numProcessedGenericArguments = genericArguments.Length;
                         builder.Append('}');
                     }
                     else

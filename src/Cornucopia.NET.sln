@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FDB5AD44-1DB2-4A22-9260-44887F6CD409}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jetbrains.Annotations.Extractor", "Jetbrains.Annotations.Extractor\Jetbrains.Annotations.Extractor.csproj", "{0E9438E2-ADED-409B-A46E-60969F1582C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetBrains.Annotations.Extractor", "JetBrains.Annotations.Extractor\JetBrains.Annotations.Extractor.csproj", "{0E9438E2-ADED-409B-A46E-60969F1582C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

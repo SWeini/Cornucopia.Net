@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using System.Xml;
 
-namespace Jetbrains.Annotations.Extractor
+namespace JetBrains.Annotations.Extractor
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

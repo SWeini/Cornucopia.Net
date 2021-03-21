@@ -21,8 +21,11 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       working-directory: ./src
-    - name: Build
-      run: dotnet build --no-restore --version-suffix $VERSION_SUFFIX
+    - name: Build Debug
+      run: dotnet build --configuration Debug --no-restore --version-suffix $VERSION_SUFFIX
+      working-directory: ./src
+    - name: Build Release
+      run: dotnet build --configuration Release --no-restore --version-suffix $VERSION_SUFFIX
       working-directory: ./src
     - name: Create external annotations
       run: |
