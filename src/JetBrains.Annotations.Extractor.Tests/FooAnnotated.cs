@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace JetBrains.Annotations.Extractor.Tests
 {
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class FooAnnotated
     {
         [Pure]

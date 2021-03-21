@@ -269,6 +269,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+            [UsedImplicitly]
             public T[] Items => this._array.AsSpan().ToArray();
         }
     }

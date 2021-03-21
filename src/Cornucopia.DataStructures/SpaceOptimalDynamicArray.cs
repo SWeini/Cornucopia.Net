@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 
 using Cornucopia.DataStructures.Utils;
 
+using JetBrains.Annotations;
+
 namespace Cornucopia.DataStructures
 {
     /// <summary>
@@ -160,6 +162,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+            [UsedImplicitly]
             public DebuggerViewSlice[] Items
             {
                 get
@@ -204,6 +207,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+            [UsedImplicitly]
             public DebuggerViewEntry[] Items => _array.Take(_length).Select((x, i) => new DebuggerViewEntry(x, i + _offset)).ToArray();
 
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]

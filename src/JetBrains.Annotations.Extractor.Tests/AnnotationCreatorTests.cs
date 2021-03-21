@@ -1,5 +1,4 @@
 using System.IO;
-using System.Xml;
 
 using NUnit.Framework;
 
@@ -13,12 +12,10 @@ namespace JetBrains.Annotations.Extractor.Tests
         {
             var creator = new AnnotationCreator();
             creator.ProcessAssembly(this.GetType().Assembly);
-            using (var writer = new StringWriter())
-            {
-                creator.Document.Save(writer);
-                var str = writer.ToString();
-                Assert.That(str, Is.EqualTo(ThisAssemblyAnnotations));
-            }
+            using var writer = new StringWriter();
+            creator.Document.Save(writer);
+            var str = writer.ToString();
+            Assert.That(str, Is.EqualTo(ThisAssemblyAnnotations));
         }
 
         private const string ThisAssemblyAnnotations = @"<?xml version=""1.0"" encoding=""utf-16""?>

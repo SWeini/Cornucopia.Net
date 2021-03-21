@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Cornucopia.DataStructures.Utils;
 
+using JetBrains.Annotations;
+
 namespace Cornucopia.DataStructures
 {
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
@@ -56,6 +58,7 @@ namespace Cornucopia.DataStructures
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+            [UsedImplicitly]
             public DebuggerItem[] Items
             {
                 get
