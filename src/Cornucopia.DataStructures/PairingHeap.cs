@@ -186,7 +186,7 @@ namespace Cornucopia.DataStructures
 
             if (node.FirstChild != null)
             {
-                this._head = this.Meld(this._head, this.MergePairs(node.FirstChild));
+                this._head = this.Meld(this._head!, this.MergePairs(node.FirstChild));
             }
         }
 
