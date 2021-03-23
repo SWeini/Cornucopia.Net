@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Cornucopia.DataStructures
 {
     /// <summary>
-    ///     A min-heap
+    ///     A min-heap based on the simple binary heap structure.
     /// </summary>
     /// <typeparam name="T">The type of elements to store in the heap.</typeparam>
     public class BinaryHeap<T>
