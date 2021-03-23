@@ -62,6 +62,15 @@ Ephemeral data structure for priority queues.
 - **O(log(N))** extract minimum (like `System.Collections.Generic.SortedSet<T>`)
 - data can contain duplicates (unlike `System.Collections.Generic.SortedSet<T>`)
 
+### [Pairing Heap](https://en.wikipedia.org/wiki/Pairing_heap)
+Ephemeral data structure for adressable priority queues.
+- **O(1)** insert
+- **O(1)** get minimum
+- **O(log(N)) amortized** extract minimum
+- **O(log(N)) amortized** delete
+- **O(log(N)) amortized** decrease key
+- **O(1)** merge
+
 ### [Dynamic Array](https://en.wikipedia.org/wiki/Dynamic_array)
 Ephemeral data structure for dynamic arrays, used internally.
 - like `System.Collections.Generic.List<T>`
