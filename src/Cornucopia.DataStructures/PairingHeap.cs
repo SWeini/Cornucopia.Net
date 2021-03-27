@@ -294,12 +294,26 @@ namespace Cornucopia.DataStructures
         /// </summary>
         public readonly struct ElementPointer
         {
+            /// <summary>
+            ///     Gets the undefined pointer.
+            /// </summary>
+            /// <value>The undefined pointer.</value>
+            public static ElementPointer Undefined => default;
+
+            /// <summary>
+            ///     Gets a value indicating whether this pointer is undefined.
+            /// </summary>
+            /// <returns><c>true</c> if the pointer is undefined; otherwise, <c>false</c>.</returns>
+            public bool IsUndefined => this._node == null;
+
+            private readonly OptimizedChildSiblingTreeNode<T>? _node;
+
             internal ElementPointer(OptimizedChildSiblingTreeNode<T> node)
             {
-                this.Node = node;
+                this._node = node;
             }
 
-            internal OptimizedChildSiblingTreeNode<T> Node { get; }
+            internal OptimizedChildSiblingTreeNode<T> Node => this._node!;
         }
     }
 }
