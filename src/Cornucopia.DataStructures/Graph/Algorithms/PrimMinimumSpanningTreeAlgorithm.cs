@@ -14,19 +14,19 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
     {
 
         private readonly TGraph _graph;
-        private readonly IDistanceCalculator<TDistance> _calculator;
+        private readonly IComparer<TDistance> _comparer;
         private readonly IEdgeDistances<TEdge, TDistance> _distances;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PrimMinimumSpanningTreeAlgorithm{TGraph,TEdge,TDistance}"/> class with the graph and the necessary basic calculations.
         /// </summary>
         /// <param name="graph">The graph to compute the minimum spanning tree for.</param>
-        /// <param name="calculator">The basic methods used to compare distances.</param>
+        /// <param name="comparer">The comparer used to compare distances.</param>
         /// <param name="distances">The basic method to extract a distance from a tagged edge.</param>
-        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IDistanceCalculator<TDistance> calculator, IEdgeDistances<TEdge, TDistance> distances)
+        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IDistanceCalculator<TDistance> comparer, IEdgeDistances<TEdge, TDistance> distances)
         {
             this._graph = graph;
-            this._calculator = calculator;
+            this._comparer = comparer;
             this._distances = distances;
         }
 
@@ -38,7 +38,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public ReadOnlySpan<EdgeIdx> ComputeMinimumSpanningTree(VertexIdx startVertex)
         {
             var heapNodes = new Dictionary<VertexIdx, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer> { { startVertex, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer.Undefined } };
-            var todo = new PairingHeap<VertexWithDistanceAndEdge>(new DistanceComparer(this._calculator));
+            var todo = new PairingHeap<VertexWithDistanceAndEdge>(new DistanceComparer(this._comparer));
             var result = new DynamicArray<EdgeIdx>(true);
             ProcessEdges(startVertex);
             while (todo.TryExtractMinimum(out var next))
@@ -64,7 +64,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
 
                         var currentBestDistanceToTarget = todo[vertexState].Distance;
                         var distance = this._distances.GetDistance(outEdge.Data);
-                        if (this._calculator.Compare(distance, currentBestDistanceToTarget) >= 0)
+                        if (this._comparer.Compare(distance, currentBestDistanceToTarget) >= 0)
                         {
                             continue;
                         }
