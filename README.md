@@ -82,6 +82,7 @@ Ephemeral data structure for graphs.
 - stored in a compact array-based format
 - [Dijkstra's shortest path](https://en.wikipedia.org/wiki/Dijkstra's_algorithm)
 - [Tarjan's strongly connected components](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
+- [Prim's minimum spanning tree](https://en.wikipedia.org/wiki/Prim%27s_algorithm)
 
 ### Persistent [Binary Tree](https://en.wikipedia.org/wiki/Binary_tree)
 Persistent data structure for binary trees, used internally.

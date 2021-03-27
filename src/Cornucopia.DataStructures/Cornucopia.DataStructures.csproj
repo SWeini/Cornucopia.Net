@@ -8,7 +8,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Version>0.2.0$(VersionSuffix)</Version>
     <Description>A .NET library containing various data structures and algorithms, such as random-access lists and finger trees.</Description>
-    <PackageTags>datastructures collections algorithms</PackageTags>
+    <PackageTags>datastructures collections algorithms graph</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
