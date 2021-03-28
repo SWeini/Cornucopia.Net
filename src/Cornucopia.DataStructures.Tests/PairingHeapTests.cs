@@ -214,6 +214,21 @@ namespace Cornucopia.DataStructures
             Assert.That(other.IsEmpty, Is.True);
         }
 
+        [Test]
+        public void Merge_TwoNonEmpty_ExtractsAllElementsCorrectly()
+        {
+            var heap = new PairingHeap<int>();
+            heap.Insert(0);
+            heap.Insert(2);
+
+            var other = new PairingHeap<int>();
+            other.Insert(1);
+            other.Insert(3);
+
+            heap.Merge(other);
+            Assert.That(ExtractAll(heap), Is.EqualTo(new[] { 0, 1, 2, 3 }));
+        }
+
         private static IEnumerable<int> ExtractAll(PairingHeap<int> heap)
         {
             while (heap.TryExtractMinimum(out var min))
