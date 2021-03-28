@@ -162,27 +162,27 @@ namespace Cornucopia.DataStructures
         }
 
         [Test]
-        public void SetItem_Decrease_ExtractsAllElementsCorrectly()
+        public void Decrease_MinimumElement_ExtractsAllElementsCorrectly()
         {
             var heap = new PairingHeap<int>();
             heap.Insert(2);
-            var pointer = heap.Insert(1);
-            heap.Insert(0);
-            heap[pointer] = -1;
+            heap.Insert(1);
+            var pointer = heap.Insert(0);
+            heap.Decrease(pointer, -1);
             var elements = ExtractAll(heap).ToArray();
-            Assert.That(elements, Is.EqualTo(new[] { -1, 0, 2 }));
+            Assert.That(elements, Is.EqualTo(new[] { -1, 1, 2 }));
         }
 
         [Test]
-        public void SetItem_Increase_ExtractsAllElementsCorrectly()
+        public void Decrease_MiddleElement_ExtractsAllElementsCorrectly()
         {
             var heap = new PairingHeap<int>();
             heap.Insert(2);
             var pointer = heap.Insert(1);
             heap.Insert(0);
-            heap[pointer] = 3;
+            heap.Decrease(pointer, -1);
             var elements = ExtractAll(heap).ToArray();
-            Assert.That(elements, Is.EqualTo(new[] { 0, 2, 3 }));
+            Assert.That(elements, Is.EqualTo(new[] { -1, 0, 2 }));
         }
 
         [Test]

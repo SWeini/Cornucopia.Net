@@ -69,7 +69,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                             continue;
                         }
 
-                        todo[vertexState] = new(outEdge.Target, distance, outEdgeIdx);
+                        todo.Decrease(vertexState, new(outEdge.Target, distance, outEdgeIdx));
                     }
                     else
                     {

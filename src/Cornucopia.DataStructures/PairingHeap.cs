@@ -73,25 +73,11 @@ namespace Cornucopia.DataStructures
         }
 
         /// <summary>
-        ///     Gets or sets the value inside an element pointer.
+        ///     Gets the element inside an element pointer.
         /// </summary>
         /// <param name="element">The pointer to the element.</param>
-        /// <param name="value">The new value inside the element pointer.</param>
-        /// <returns>The value inside <paramref name="element"/>.</returns>
-        public T this[ElementPointer element]
-        {
-            get => element.Node.Value;
-            set
-            {
-                var node = element.Node;
-                this.Remove(node);
-                node.Value = value;
-                node.LeftSiblingOrParent = null;
-                node.RightSibling = null;
-                node.FirstChild = null;
-                this.Merge(node);
-            }
-        }
+        /// <returns>The element referenced by the element pointer.</returns>
+        public T this[ElementPointer element] => element.Node.Value;
 
         /// <summary>
         ///     Inserts an element into the heap.
@@ -161,33 +147,42 @@ namespace Cornucopia.DataStructures
         /// <param name="element">The pointer to the element to be removed.</param>
         public void Remove(ElementPointer element)
         {
-            this.Remove(element.Node);
-        }
-
-        private void Remove(OptimizedChildSiblingTreeNode<T> node)
-        {
             Debug.Assert(this._head != null);
+            var node = element.Node;
             if (this._head == node)
             {
                 this._head = this.MergePairs(this._head.FirstChild);
                 return;
             }
 
-            var reference = node.LeftSiblingOrParent!;
-            if (reference.FirstChild == node)
-            {
-                reference.FirstChild = node.RightSibling;
-            }
-            else
-            {
-                Debug.Assert(reference.RightSibling == node);
-                reference.RightSibling = node.RightSibling;
-            }
-
+            Cut(node);
             if (node.FirstChild != null)
             {
                 this._head = this.Meld(this._head!, this.MergePairs(node.FirstChild));
             }
+        }
+
+        /// <summary>
+        ///     Decreases the element inside a specified element pointer.
+        /// </summary>
+        /// <param name="element">The pointer to the element to decrease.</param>
+        /// <param name="item">The new element.</param>
+        /// <remarks>It is undefined behavior to increase the element.</remarks>
+        public void Decrease(ElementPointer element, T item)
+        {
+            Debug.Assert(this._head != null);
+            var node = element.Node;
+            if (this._head == node)
+            {
+                node.Value = item;
+                return;
+            }
+
+            Cut(node);
+            node.LeftSiblingOrParent = null;
+            node.RightSibling = null;
+            node.Value = item;
+            this._head = this.Meld(this._head!, node);
         }
 
         /// <summary>
@@ -202,14 +197,22 @@ namespace Cornucopia.DataStructures
                 return;
             }
 
-            this.Merge(heap._head);
+            this._head = this._head == null ? heap._head : this.Meld(heap._head, this._head);
             heap._head = null;
         }
 
-        private void Merge(OptimizedChildSiblingTreeNode<T> node)
+        private static void Cut(OptimizedChildSiblingTreeNode<T> node)
         {
-            this._head = this._head == null ? node : this.Meld(node, this._head);
-
+            var reference = node.LeftSiblingOrParent!;
+            if (reference.FirstChild == node)
+            {
+                reference.FirstChild = node.RightSibling;
+            }
+            else
+            {
+                Debug.Assert(reference.RightSibling == node);
+                reference.RightSibling = node.RightSibling;
+            }
         }
 
         [return: NotNullIfNotNull("firstChild")]
