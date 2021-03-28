@@ -162,27 +162,27 @@ namespace Cornucopia.DataStructures
         }
 
         [Test]
-        public void SetItem_Decrease_ExtractsAllElementsCorrectly()
+        public void Decrease_MinimumElement_ExtractsAllElementsCorrectly()
         {
             var heap = new PairingHeap<int>();
             heap.Insert(2);
-            var pointer = heap.Insert(1);
-            heap.Insert(0);
-            heap[pointer] = -1;
+            heap.Insert(1);
+            var pointer = heap.Insert(0);
+            heap.Decrease(pointer, -1);
             var elements = ExtractAll(heap).ToArray();
-            Assert.That(elements, Is.EqualTo(new[] { -1, 0, 2 }));
+            Assert.That(elements, Is.EqualTo(new[] { -1, 1, 2 }));
         }
 
         [Test]
-        public void SetItem_Increase_ExtractsAllElementsCorrectly()
+        public void Decrease_MiddleElement_ExtractsAllElementsCorrectly()
         {
             var heap = new PairingHeap<int>();
             heap.Insert(2);
             var pointer = heap.Insert(1);
             heap.Insert(0);
-            heap[pointer] = 3;
+            heap.Decrease(pointer, -1);
             var elements = ExtractAll(heap).ToArray();
-            Assert.That(elements, Is.EqualTo(new[] { 0, 2, 3 }));
+            Assert.That(elements, Is.EqualTo(new[] { -1, 0, 2 }));
         }
 
         [Test]
@@ -212,6 +212,21 @@ namespace Cornucopia.DataStructures
             other.Insert(0);
             heap.Merge(other);
             Assert.That(other.IsEmpty, Is.True);
+        }
+
+        [Test]
+        public void Merge_TwoNonEmpty_ExtractsAllElementsCorrectly()
+        {
+            var heap = new PairingHeap<int>();
+            heap.Insert(0);
+            heap.Insert(2);
+
+            var other = new PairingHeap<int>();
+            other.Insert(1);
+            other.Insert(3);
+
+            heap.Merge(other);
+            Assert.That(ExtractAll(heap), Is.EqualTo(new[] { 0, 1, 2, 3 }));
         }
 
         private static IEnumerable<int> ExtractAll(PairingHeap<int> heap)
