@@ -134,11 +134,55 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         [TestCase(-1)]
-        [TestCase(3)]
+        [TestCase(4)]
         public void Item_InvalidIndex_Throws(int index)
         {
-            var list = RandomAccessList.Create(1, 2, 3);
+            var list = RandomAccessList.Create(0, 1, 2, 3);
             Assert.That(() => list[index], Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void Item_AtIndex_ReturnsCorrectElement(int index)
+        {
+            var list = RandomAccessList.Create(0, 1, 2, 3);
+            Assert.That(list[index], Is.EqualTo(index));
+        }
+
+        [TestCase(-1)]
+        [TestCase(4)]
+        public void SetItem_InvalidIndex_Throws(int index)
+        {
+            var list = RandomAccessList.Create(0, 1, 2, 3);
+            Assert.That(() => list.SetItem(index, 0), Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void SetItem_AtIndex_ElementAtIndexChanges(int index)
+        {
+            var list = RandomAccessList.Create(new int[4]).SetItem(index, 42);
+            Assert.That(list[index], Is.EqualTo(42));
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void SetItem_AtIndex_DoesNotChangeOtherElements(int index)
+        {
+            var list = RandomAccessList.Create(new int[4]).SetItem(index, 42);
+            for (var i = 0; i < 4; i++)
+            {
+                if (i != index)
+                {
+                    Assert.That(list[i], Is.Zero);
+                }
+            }
         }
 
         [Test]
