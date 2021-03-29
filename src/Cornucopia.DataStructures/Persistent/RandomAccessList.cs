@@ -175,6 +175,65 @@ namespace Cornucopia.DataStructures.Persistent
         }
 
         /// <summary>
+        ///     Sets an element at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the element to set.</param>
+        /// <param name="value">The element to store at the specified index.</param>
+        /// <returns>A new list with the specified element at the specified index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The specified index is out of range.</exception>
+        [Pure]
+        public RandomAccessList<T> SetItem(int index, T value)
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return new(SetInList(this._root));
+
+            LinkedList<Node>.Node SetInList(LinkedList<Node>.Node? list)
+            {
+                if (list == null)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var node = list.Head;
+                if (index < node.Count)
+                {
+                    var tree = SetInTree(node.Tree, node.Count);
+                    return new(list.Tail, new(tree, node.Count));
+                }
+
+                index -= node.Count;
+                var tail = SetInList(list.Tail);
+                return new(tail, node);
+            }
+
+            BinaryTree<T>.Node SetInTree(BinaryTree<T>.Node node, int count)
+            {
+                if (index == 0)
+                {
+                    return new(node.LeftChild, node.RightChild, value);
+                }
+
+                index--;
+                var childCount = count / 2;
+                if (index < childCount)
+                {
+                    var child = SetInTree(node.LeftChild!, childCount);
+                    return new(child, node.RightChild, node.Value);
+                }
+                else
+                {
+                    index -= childCount;
+                    var child = SetInTree(node.RightChild!, childCount);
+                    return new(node.LeftChild, child, node.Value);
+                }
+            }
+        }
+
+        /// <summary>
         ///     Performs the specified action on each element of the list.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the list.</param>
