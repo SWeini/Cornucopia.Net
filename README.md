@@ -83,6 +83,7 @@ Ephemeral data structure for graphs.
 - [Dijkstra's shortest path](https://en.wikipedia.org/wiki/Dijkstra's_algorithm)
 - [Tarjan's strongly connected components](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
 - [Prim's minimum spanning tree](https://en.wikipedia.org/wiki/Prim%27s_algorithm)
+- [Edmonds–Karp maximum flow](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)
 
 ### Persistent [Binary Tree](https://en.wikipedia.org/wiki/Binary_tree)
 Persistent data structure for binary trees, used internally.
@@ -101,7 +102,6 @@ Currently I'm thinking about these additions (in no particular order), many of w
 - More Heaps (Binomial / Fibonacci / Weak / MinMax)
 - (Persistent / Concurrent) Hash Array Mapped Trie
 - RRB Vector
-- More algorithms for graphs (e.g. spanning tree)
 - Prefix Trie
 - Suffix Tree
 
