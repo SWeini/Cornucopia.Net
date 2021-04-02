@@ -23,7 +23,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         /// <param name="graph">The graph to compute the minimum spanning tree for.</param>
         /// <param name="comparer">The comparer used to compare distances.</param>
         /// <param name="distances">The basic method to extract a distance from a tagged edge.</param>
-        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IDistanceCalculator<TDistance> comparer, IEdgeDistances<TEdge, TDistance> distances)
+        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IComparer<TDistance> comparer, IEdgeDistances<TEdge, TDistance> distances)
         {
             this._graph = graph;
             this._comparer = comparer;
