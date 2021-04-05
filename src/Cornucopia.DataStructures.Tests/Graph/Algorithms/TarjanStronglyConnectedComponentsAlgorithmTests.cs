@@ -11,7 +11,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeStronglyConnectedComponents_SimpleGraph_IsCorrect()
         {
             var g = CreateGraph(5, false, (0, 1), (1, 2), (2, 3), (3, 4), (0, 4));
-            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>>(g);
+            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>, VertexIdx, EdgeIdx>(g);
             var components = a.ComputeStronglyConnectedComponents(new VertexIdx(0));
 
             Assert.That(components.Length, Is.EqualTo(5));
@@ -26,7 +26,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeStronglyConnectedComponents_SimpleGraph_CanRunPartially()
         {
             var g = CreateGraph(5, false, (0, 1), (1, 2), (2, 3), (3, 4), (0, 4));
-            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>>(g);
+            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>, VertexIdx, EdgeIdx>(g);
             var components = a.ComputeStronglyConnectedComponents(new VertexIdx(2));
 
             Assert.That(components.Length, Is.EqualTo(3));
@@ -45,7 +45,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeStronglyConnectedComponents_SimpleGraph_SecondRunReturnsNoComponents()
         {
             var g = CreateGraph(5, false, (0, 1), (1, 2), (2, 3), (3, 4), (0, 4));
-            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>>(g);
+            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>, VertexIdx, EdgeIdx>(g);
             a.ComputeStronglyConnectedComponents(new VertexIdx(0));
             var components = a.ComputeStronglyConnectedComponents(new VertexIdx(0));
             Assert.That(components.Length, Is.Zero);
@@ -56,7 +56,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         {
             var g = CreateGraph(8, false, (0, 4), (1, 0), (2, 1), (2, 3), (3, 2), (4, 1), (5, 1), (5, 4), (5, 6),
                 (6, 2), (6, 5), (7, 3), (7, 6), (7, 7));
-            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>>(g);
+            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>, VertexIdx, EdgeIdx>(g);
             var components = a.ComputeStronglyConnectedComponents(new VertexIdx(7));
 
             Assert.That(components.Length, Is.EqualTo(4));
@@ -81,7 +81,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                 v1 = v2;
             }
 
-            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>>(g);
+            var a = new TarjanStronglyConnectedComponentsAlgorithm<DirectedGraph<Empty, Empty>, VertexIdx, EdgeIdx>(g);
             var components = a.ComputeStronglyConnectedComponents(v0);
             Assert.That(components.Length, Is.EqualTo(size + 1));
         }

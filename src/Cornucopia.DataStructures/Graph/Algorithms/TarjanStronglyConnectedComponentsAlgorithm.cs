@@ -1,26 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Cornucopia.DataStructures.Utils;
+
 namespace Cornucopia.DataStructures.Graph.Algorithms
 {
     /// <summary>
     ///     Computes the strongly connected components in a directed graph.
     /// </summary>
     /// <typeparam name="TGraph">The type of the graph to compute strongly connected components for.</typeparam>
-    public class TarjanStronglyConnectedComponentsAlgorithm<TGraph>
-        where TGraph : IEdges, IImplicitOutEdgesIndices
+    /// <typeparam name="TVertexId">The type used to identify vertices.</typeparam>
+    /// <typeparam name="TEdgeId">The type used to identify edges.</typeparam>
+    public class TarjanStronglyConnectedComponentsAlgorithm<TGraph, TVertexId, TEdgeId>
+        where TGraph : IImplicitOutEdgesIndices<TVertexId, TEdgeId>, IEqualityComparerProvider<TVertexId>
+        where TVertexId : notnull
+        where TEdgeId : notnull
     {
-        private readonly TGraph _graph;
-        private readonly Dictionary<VertexIdx, DataPerVertex> _data;
+        private TGraph _graph;
+        private readonly Dictionary<TVertexId, DataPerVertex> _data;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TarjanStronglyConnectedComponentsAlgorithm{TGraph}"/> class with the graph.
+        ///     Initializes a new instance of the <see cref="TarjanStronglyConnectedComponentsAlgorithm{TGraph,TVertexId,TEdgeId}"/> class with the graph.
         /// </summary>
         /// <param name="graph">The graph to compute strongly connected components for.</param>
         public TarjanStronglyConnectedComponentsAlgorithm(TGraph graph)
         {
             this._graph = graph;
-            this._data = new Dictionary<VertexIdx, DataPerVertex>();
+            this._data = new Dictionary<TVertexId, DataPerVertex>(this._graph.Comparer);
         }
 
         /// <summary>
@@ -28,15 +34,15 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         /// </summary>
         /// <param name="startVertex">The vertex where the algorithm should start.</param>
         /// <returns>Strongly connected components of the graph, that are reachable from <paramref name="startVertex"/> and weren't reported by previous calls to this method.</returns>
-        public SplitArray<VertexIdx> ComputeStronglyConnectedComponents(VertexIdx startVertex)
+        public SplitArray<TVertexId> ComputeStronglyConnectedComponents(TVertexId startVertex)
         {
-            var result = new SplitArrayBuilder<VertexIdx>(0, 0);
+            var result = new SplitArrayBuilder<TVertexId>(0, 0);
             if (this._data.ContainsKey(startVertex))
             {
                 return result.Build();
             }
 
-            var s = new DynamicArray<VertexIdx>(true);
+            var s = new DynamicArray<TVertexId>(true);
             var index = 0;
 
             var stack = new DynamicArray<VertexEdgeIterator>(true);
@@ -80,7 +86,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                 var finalData = this._data[v];
                 if (finalData.LowLink == finalData.Index)
                 {
-                    VertexIdx w;
+                    TVertexId w;
                     do
                     {
                         w = s.RemoveLast();
@@ -88,7 +94,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                         dw.IsOnStack = false;
                         this._data[w] = dw;
                         result.AddValue(w);
-                    } while (w != v);
+                    } while (!this._graph.Equals(w, v));
 
                     result.EndPart();
                 }
@@ -99,13 +105,13 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
 
         private readonly struct VertexEdgeIterator
         {
-            public VertexEdgeIterator(VertexIdx vertex, int lastEdge)
+            public VertexEdgeIterator(TVertexId vertex, int lastEdge)
             {
                 this.Vertex = vertex;
                 this.LastEdge = lastEdge;
             }
 
-            public VertexIdx Vertex { get; }
+            public TVertexId Vertex { get; }
             public int LastEdge { get; }
         }
 

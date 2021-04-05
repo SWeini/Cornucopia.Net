@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Cornucopia.DataStructures.Graph
@@ -8,7 +9,7 @@ namespace Cornucopia.DataStructures.Graph
     /// </summary>
     /// <typeparam name="TVertex">The type of data tagged to a vertex.</typeparam>
     /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
-    public class DirectedGraph<TVertex, TEdge> : IMutableGraph<TVertex, TEdge>, IVertexSet<TVertex>, IEdgeSet<TEdge>, IImplicitOutEdgesIndices, IImplicitInEdgesIndices
+    public class DirectedGraph<TVertex, TEdge> : IMutableGraph<VertexIdx, TVertex, EdgeIdx, TEdge>, IVertexSet, ITaggedVertices<VertexIdx, TVertex>, IEdgeSet, ITaggedEdges<EdgeIdx, TEdge>, IImplicitOutEdgesIndices<VertexIdx, EdgeIdx>, IImplicitInEdgesIndices<VertexIdx, EdgeIdx>, IEqualityComparerProvider<VertexIdx>, IEqualityComparerProvider<EdgeIdx>
     {
         private DynamicArrayFreeListAllocator<VertexData> _vertices;
         private DynamicArrayFreeListAllocator<EdgeData> _edges;
@@ -68,35 +69,28 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         /// <inheritdoc/>
+        public int VertexCount => this._vertices.Count;
+
+        /// <inheritdoc/>
         public ref TVertex this[VertexIdx index] => ref this._vertices[index.Index].Data;
 
         /// <inheritdoc/>
-        public int VertexCount => this._vertices.Count;
+        public TVertex GetVertexTag(VertexIdx vertex)
+        {
+            return this[vertex];
+        }
+
+        /// <inheritdoc/>
+        public int EdgeCount => this._edges.Count;
 
         /// <inheritdoc/>
         public ref TEdge this[EdgeIdx index] => ref this._edges[index.Index].Data;
 
         /// <inheritdoc/>
-        public Edge<TEdge> GetEdge(EdgeIdx index)
+        public TEdge GetEdgeTag(EdgeIdx edge)
         {
-            ref var edge = ref this._edges[index.Index];
-            return new Edge<TEdge>(edge.Data, edge.Source, edge.Target);
+            return this[edge];
         }
-
-        /// <inheritdoc/>
-        public VertexIdx GetSource(EdgeIdx index)
-        {
-            return this._edges[index.Index].Source;
-        }
-
-        /// <inheritdoc/>
-        public VertexIdx GetTarget(EdgeIdx index)
-        {
-            return this._edges[index.Index].Target;
-        }
-
-        /// <inheritdoc/>
-        public int EdgeCount => this._edges.Count;
 
         /// <inheritdoc/>
         public int GetOutDegree(VertexIdx index)
@@ -117,9 +111,15 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         /// <inheritdoc/>
-        public int GetInDegree(VertexIdx index)
+        public VertexIdx GetTarget(EdgeIdx index)
         {
-            return this._vertices[index.Index].EdgeStorage.InDegree;
+            return this._edges[index.Index].Target;
+        }
+
+        /// <inheritdoc/>
+        public int GetInDegree(VertexIdx vertex)
+        {
+            return this._vertices[vertex.Index].EdgeStorage.InDegree;
         }
 
         /// <inheritdoc/>
@@ -133,6 +133,16 @@ namespace Cornucopia.DataStructures.Graph
 
             return this._links.AsSpan(vertex.StartIndex + vertex.EdgeStorage.OutDegree, vertex.EdgeStorage.InDegree);
         }
+
+        /// <inheritdoc/>
+        public VertexIdx GetSource(EdgeIdx index)
+        {
+            return this._edges[index.Index].Source;
+        }
+
+        IEqualityComparer<VertexIdx>? IEqualityComparerProvider<VertexIdx>.Comparer => null;
+
+        IEqualityComparer<EdgeIdx>? IEqualityComparerProvider<EdgeIdx>.Comparer => null;
 
         [DebuggerDisplay("{" + nameof(Data) + "}")]
         private struct VertexData

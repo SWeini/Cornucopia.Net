@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Cornucopia.DataStructures.Graph
@@ -8,7 +9,7 @@ namespace Cornucopia.DataStructures.Graph
     /// </summary>
     /// <typeparam name="TVertex">The type of data tagged to a vertex.</typeparam>
     /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
-    public class UndirectedGraph<TVertex, TEdge> : IMutableGraph<TVertex, TEdge>, IVertexSet<TVertex>, IEdgeSet<TEdge>, IImplicitOutEdgesIndices
+    public class UndirectedGraph<TVertex, TEdge> : IMutableGraph<VertexIdx, TVertex, EdgeIdx, TEdge>, IVertexSet, ITaggedVertices<VertexIdx, TVertex>, IEdgeSet, ITaggedEdges<EdgeIdx, TEdge>, IImplicitOutEdgesIndices<VertexIdx, EdgeIdx>, IEqualityComparerProvider<VertexIdx>
     {
         private DynamicArrayFreeListAllocator<VertexData> _vertices;
         private DynamicArrayFreeListAllocator<EdgeData> _edges;
@@ -63,7 +64,8 @@ namespace Cornucopia.DataStructures.Graph
         /// <inheritdoc/>
         public void RemoveEdge(EdgeIdx edge)
         {
-            ref var edgeData = ref this._edges[edge.Index];
+            var edgeIndex = UndirectedEdgeStorage.GetIndex(edge);
+            ref var edgeData = ref this._edges[edgeIndex];
             ref var sourceVertex = ref this._vertices[edgeData.Source.Index];
             sourceVertex.EdgeStorage.RemoveOutEdge(ref this._links, ref sourceVertex.StartIndex, edge);
             if (edgeData.Source != edgeData.Target)
@@ -72,34 +74,52 @@ namespace Cornucopia.DataStructures.Graph
                 targetVertex.EdgeStorage.RemoveInEdge(ref this._links, ref targetVertex.StartIndex, edge);
             }
 
-            this._edges.RemoveAt(edge.Index);
+            this._edges.RemoveAt(edgeIndex);
         }
-
-        /// <inheritdoc/>
-        public ref TVertex this[VertexIdx index] => ref this._vertices[index.Index].Data;
 
         /// <inheritdoc/>
         public int VertexCount => this._vertices.Count;
 
         /// <inheritdoc/>
-        public ref TEdge this[EdgeIdx index] => ref this._edges[index.Index].Data;
+        public ref TVertex this[VertexIdx index] => ref this._vertices[index.Index].Data;
 
         /// <inheritdoc/>
-        public Edge<TEdge> GetEdge(EdgeIdx index)
+        public TVertex GetVertexTag(VertexIdx vertex)
         {
-            if (UndirectedEdgeStorage.IsReverse(index))
-            {
-                ref var edge = ref this._edges[UndirectedEdgeStorage.Reverse(index).Index];
-                return new Edge<TEdge>(edge.Data, edge.Target, edge.Source);
-            }
-            else
-            {
-                ref var edge = ref this._edges[index.Index];
-                return new Edge<TEdge>(edge.Data, edge.Source, edge.Target);
-            }
+            return this[vertex];
         }
 
         /// <inheritdoc/>
+        public int EdgeCount => this._edges.Count;
+
+        /// <inheritdoc/>
+        public ref TEdge this[EdgeIdx index] => ref this._edges[UndirectedEdgeStorage.GetIndex(index)].Data;
+
+        /// <inheritdoc/>
+        public TEdge GetEdgeTag(EdgeIdx edge)
+        {
+            return this[edge];
+        }
+
+        /// <inheritdoc/>
+        public int GetOutDegree(VertexIdx index)
+        {
+            return this._vertices[index.Index].EdgeStorage.Degree;
+        }
+
+        /// <inheritdoc/>
+        public ReadOnlySpan<EdgeIdx> GetOutEdges(VertexIdx index)
+        {
+            ref var vertex = ref this._vertices[index.Index];
+            if (vertex.StartIndex < 0)
+            {
+                return ReadOnlySpan<EdgeIdx>.Empty;
+            }
+
+            return this._links.AsSpan(vertex.StartIndex, vertex.EdgeStorage.Degree);
+        }
+
+        /// <inheritdoc cref="IImplicitInEdgesIndices{TVertexId,TEdgeId}"/>
         public VertexIdx GetSource(EdgeIdx index)
         {
             if (UndirectedEdgeStorage.IsReverse(index))
@@ -121,26 +141,7 @@ namespace Cornucopia.DataStructures.Graph
             return this._edges[index.Index].Target;
         }
 
-        /// <inheritdoc/>
-        public int EdgeCount => this._edges.Count;
-
-        /// <inheritdoc/>
-        public int GetOutDegree(VertexIdx index)
-        {
-            return this._vertices[index.Index].EdgeStorage.Degree;
-        }
-
-        /// <inheritdoc/>
-        public ReadOnlySpan<EdgeIdx> GetOutEdges(VertexIdx index)
-        {
-            ref var vertex = ref this._vertices[index.Index];
-            if (vertex.StartIndex < 0)
-            {
-                return ReadOnlySpan<EdgeIdx>.Empty;
-            }
-
-            return this._links.AsSpan(vertex.StartIndex, vertex.EdgeStorage.Degree);
-        }
+        IEqualityComparer<VertexIdx>? IEqualityComparerProvider<VertexIdx>.Comparer => null;
 
         [DebuggerDisplay("{" + nameof(Data) + "}")]
         private struct VertexData

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Cornucopia.DataStructures.Utils;
+
+using NUnit.Framework;
 
 namespace Cornucopia.DataStructures.Graph
 {
@@ -20,6 +22,13 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
+        public void Ctor_Comparer_IsNull()
+        {
+            var graph = new DirectedGraphWithoutInEdges<int, int>();
+            Assert.That(graph.GetComparer<DirectedGraphWithoutInEdges<int, int>, VertexIdx>(), Is.Null);
+        }
+
+        [Test]
         public void AddVertex_Empty_VertexCountIsOne()
         {
             var graph = new DirectedGraphWithoutInEdges<int, int>();
@@ -28,11 +37,11 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
-        public void AddVertex_Empty_GetItemReturnsData()
+        public void AddVertex_Empty_GetVertexTagReturnsData()
         {
             var graph = new DirectedGraphWithoutInEdges<int, int>();
             var v = graph.AddVertex(42);
-            Assert.That(graph[v], Is.EqualTo(42));
+            Assert.That(graph.GetVertexTag(v), Is.EqualTo(42));
         }
 
         [Test]
@@ -46,13 +55,13 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
-        public void AddEdge_GraphWithTwoVertices_GetItemReturnsData()
+        public void AddEdge_GraphWithTwoVertices_GetEdgeTagReturnsData()
         {
             var graph = new DirectedGraphWithoutInEdges<int, int>();
             var v1 = graph.AddVertex(0);
             var v2 = graph.AddVertex(0);
             var e = graph.AddEdge(v1, v2, 42);
-            Assert.That(graph[e], Is.EqualTo(42));
+            Assert.That(graph.GetEdgeTag(e), Is.EqualTo(42));
         }
 
         [Test]
@@ -65,7 +74,6 @@ namespace Cornucopia.DataStructures.Graph
             Assert.That(graph.GetOutDegree(v1), Is.EqualTo(1));
             var outEdges = graph.GetOutEdges(v1);
             Assert.That(outEdges.Length, Is.EqualTo(1));
-            Assert.That(graph.GetSource(outEdges[0]), Is.EqualTo(v1));
             Assert.That(graph.GetTarget(outEdges[0]), Is.EqualTo(v2));
         }
 
@@ -138,9 +146,8 @@ namespace Cornucopia.DataStructures.Graph
             var v0 = graph.AddVertex(0);
             var v1 = graph.AddVertex(0);
             var e = graph.AddEdge(v0, v1, 0);
-            var edge = graph.GetEdge(e);
-            Assert.That(edge.Source, Is.EqualTo(v0));
-            Assert.That(edge.Target, Is.EqualTo(v1));
+            Assert.That(graph.GetSource(e), Is.EqualTo(v0));
+            Assert.That(graph.GetTarget(e), Is.EqualTo(v1));
         }
 
         [Test]
@@ -150,7 +157,7 @@ namespace Cornucopia.DataStructures.Graph
             var v0 = graph.AddVertex(0);
             var v1 = graph.AddVertex(0);
             var e = graph.AddEdge(v0, v1, 42);
-            Assert.That(graph.GetEdge(e).Data, Is.EqualTo(42));
+            Assert.That(graph.GetEdgeTag(e), Is.EqualTo(42));
         }
 
         [Test]
