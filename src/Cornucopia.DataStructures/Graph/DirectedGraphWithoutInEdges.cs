@@ -10,7 +10,7 @@ namespace Cornucopia.DataStructures.Graph
     /// <typeparam name="TVertex">The type of data tagged to a vertex.</typeparam>
     /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
     /// <remarks>Use <see cref="DirectedGraph{TVertex,TEdge}"/> if you need to query inbound edges.</remarks>
-    public class DirectedGraphWithoutInEdges<TVertex, TEdge> : IMutableGraph<VertexIdx, TVertex, EdgeIdx, TEdge>, IVertexSet, ITaggedVertices<VertexIdx, TVertex>, IEdgeSet, ITaggedEdges<EdgeIdx, TEdge>, IImplicitOutEdgesIndices<VertexIdx, EdgeIdx>, IEqualityComparerProvider<VertexIdx>
+    public class DirectedGraphWithoutInEdges<TVertex, TEdge> : IMutableGraph<VertexIdx, TVertex, EdgeIdx, TEdge>, IVertexSet, ITaggedVertices<VertexIdx, TVertex>, IEdgeSet, ITaggedEdges<EdgeIdx, TEdge>, IImplicitOutEdgesIndices<VertexIdx, EdgeIdx>, IEqualityComparerProvider<VertexIdx>, IEqualityComparerProvider<EdgeIdx>
     {
         private DynamicArrayFreeListAllocator<VertexData> _vertices;
         private DynamicArrayFreeListAllocator<EdgeData> _edges;
@@ -120,6 +120,8 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         IEqualityComparer<VertexIdx>? IEqualityComparerProvider<VertexIdx>.Comparer => null;
+
+        IEqualityComparer<EdgeIdx>? IEqualityComparerProvider<EdgeIdx>.Comparer => null;
 
         [DebuggerDisplay("{" + nameof(Data) + "}")]
         private struct VertexData

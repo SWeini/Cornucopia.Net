@@ -22,10 +22,17 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
-        public void Ctor_Comparer_IsNull()
+        public void Ctor_VertexComparer_IsNull()
         {
             var graph = new DirectedGraphWithoutInEdges<int, int>();
             Assert.That(graph.GetComparer<DirectedGraphWithoutInEdges<int, int>, VertexIdx>(), Is.Null);
+        }
+
+        [Test]
+        public void Ctor_EdgeComparer_IsNull()
+        {
+            var graph = new DirectedGraphWithoutInEdges<int, int>();
+            Assert.That(graph.GetComparer<DirectedGraphWithoutInEdges<int, int>, EdgeIdx>(), Is.Null);
         }
 
         [Test]
@@ -74,6 +81,7 @@ namespace Cornucopia.DataStructures.Graph
             Assert.That(graph.GetOutDegree(v1), Is.EqualTo(1));
             var outEdges = graph.GetOutEdges(v1);
             Assert.That(outEdges.Length, Is.EqualTo(1));
+            Assert.That(graph.GetSource(outEdges[0]), Is.EqualTo(v1));
             Assert.That(graph.GetTarget(outEdges[0]), Is.EqualTo(v2));
         }
 
