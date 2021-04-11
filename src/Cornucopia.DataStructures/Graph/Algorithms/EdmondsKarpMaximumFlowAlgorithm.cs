@@ -3,32 +3,34 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+using Cornucopia.DataStructures.Utils;
+
 namespace Cornucopia.DataStructures.Graph.Algorithms
 {
     /// <summary>
     ///     Computes the maximum flow between two vertices in an edge-weighted graph.
     /// </summary>
     /// <typeparam name="TGraph">The type of the graph to compute maximum flow in.</typeparam>
-    /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
+    /// <typeparam name="TVertexId">The type used to identify vertices.</typeparam>
+    /// <typeparam name="TEdgeId">The type used to identify edges.</typeparam>
     /// <typeparam name="TCapacity">The type used for capacity and flow calculations.</typeparam>
-    public class EdmondsKarpMaximumFlowAlgorithm<TGraph, TEdge, TCapacity>
-        where TGraph : IEdges<TEdge>, IImplicitOutEdgesIndices, IImplicitInEdgesIndices
+    public class EdmondsKarpMaximumFlowAlgorithm<TGraph, TVertexId, TEdgeId, TCapacity>
+        where TGraph : IImplicitOutEdgesIndices<TVertexId, TEdgeId>, IImplicitInEdgesIndices<TVertexId, TEdgeId>, ITaggedEdges<TEdgeId, TCapacity>, IEqualityComparerProvider<TVertexId>, IEqualityComparerProvider<TEdgeId>
+        where TVertexId : notnull
+        where TEdgeId : notnull
     {
-        private readonly TGraph _graph;
+        private TGraph _graph;
         private readonly ICapacityCalculator<TCapacity> _calculator;
-        private readonly IEdgeCapacities<TEdge, TCapacity> _capacities;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="EdmondsKarpMaximumFlowAlgorithm{TGraph,TEdge,TCapacity}"/> class with the graph end the necessary basic calculations.
+        ///     Initializes a new instance of the <see cref="EdmondsKarpMaximumFlowAlgorithm{TGraph,TVertexId,TEdgeId,TCapacity}"/> class with the graph end the necessary basic calculations.
         /// </summary>
         /// <param name="graph">The graph to compute maximum flow in.</param>
         /// <param name="calculator">The basic methods used to initialize, add, negate and compare capacity and flow.</param>
-        /// <param name="capacities">The basic method to extract a capacity from a tagged edge.</param>
-        public EdmondsKarpMaximumFlowAlgorithm(TGraph graph, ICapacityCalculator<TCapacity> calculator, IEdgeCapacities<TEdge, TCapacity> capacities)
+        public EdmondsKarpMaximumFlowAlgorithm(TGraph graph, ICapacityCalculator<TCapacity> calculator)
         {
             this._graph = graph;
             this._calculator = calculator;
-            this._capacities = capacities;
         }
 
         /// <summary>
@@ -38,12 +40,12 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         /// <param name="target">The vertex where the flow should end.</param>
         /// <param name="sourcePartition">The partition of the corresponding minimum cut, which contains <paramref name="source"/>.</param>
         /// <returns>The maximum flow from <paramref name="source"/> to <paramref name="target"/>.</returns>
-        public TCapacity ComputeMaximumFlow(VertexIdx source, VertexIdx target, out VertexIdx[] sourcePartition)
+        public TCapacity ComputeMaximumFlow(TVertexId source, TVertexId target, out TVertexId[] sourcePartition)
         {
             var result = this._calculator.Zero;
-            var flows = new Dictionary<EdgeIdx, TCapacity>();
-            var predecessors = new Dictionary<VertexIdx, DirectedEdge>();
-            var queue = new Queue<VertexIdx>();
+            var flows = new Dictionary<TEdgeId, TCapacity>(this._graph.GetComparer<TGraph, TEdgeId>());
+            var predecessors = new Dictionary<TVertexId, DirectedEdge>(this._graph.GetComparer<TGraph, TVertexId>());
+            var queue = new Queue<TVertexId>();
             while (true)
             {
                 queue.Enqueue(source);
@@ -54,14 +56,14 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                     foreach (var edgeIdx in outEdges)
                     {
                         var t = this._graph.GetTarget(edgeIdx);
-                        if (t != source && !predecessors.ContainsKey(t))
+                        if (!this._graph.Equals(t, source) && !predecessors.ContainsKey(t))
                         {
                             if (!flows.TryGetValue(edgeIdx, out var flow))
                             {
                                 flow = this._calculator.Zero;
                             }
 
-                            var capacity = this._capacities.GetCapacity(this._graph[edgeIdx]);
+                            var capacity = this._graph.GetEdgeTag(edgeIdx);
                             if (this._calculator.Compare(capacity, flow) > 0)
                             {
                                 predecessors[t] = new(edgeIdx, false);
@@ -74,7 +76,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                     foreach (var edgeIdx in inEdges)
                     {
                         var s = this._graph.GetSource(edgeIdx);
-                        if (s != source && !predecessors.ContainsKey(s))
+                        if (!this._graph.Equals(s, source) && !predecessors.ContainsKey(s))
                         {
                             if (flows.TryGetValue(edgeIdx, out var flow))
                             {
@@ -131,15 +133,15 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                         return f;
                     }
 
-                    var capacity = this._capacities.GetCapacity(this._graph[e.Edge]);
+                    var capacity = this._graph.GetEdgeTag(e.Edge);
                     return this._calculator.Add(capacity, this._calculator.Negate(f));
                 }
 
                 Debug.Assert(!e.IsReverse);
-                return this._capacities.GetCapacity(this._graph[e.Edge]);
+                return this._graph.GetEdgeTag(e.Edge);
             }
 
-            ReadOnlySpan<DirectedEdge> GetAugmentingPath(VertexIdx t)
+            ReadOnlySpan<DirectedEdge> GetAugmentingPath(TVertexId t)
             {
                 var path = new DynamicArray<DirectedEdge>(true);
                 while (true)
@@ -157,13 +159,13 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
 
         private readonly struct DirectedEdge
         {
-            public DirectedEdge(EdgeIdx edge, bool isReverse)
+            public DirectedEdge(TEdgeId edge, bool isReverse)
             {
                 this.Edge = edge;
                 this.IsReverse = isReverse;
             }
 
-            public EdgeIdx Edge { get; }
+            public TEdgeId Edge { get; }
             public bool IsReverse { get; }
         }
     }

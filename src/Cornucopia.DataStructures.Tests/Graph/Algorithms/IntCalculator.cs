@@ -1,6 +1,6 @@
 ﻿namespace Cornucopia.DataStructures.Graph.Algorithms
 {
-    internal class IntCalculator : IDistanceCalculator<int>, IEdgeDistances<int, int>, ICapacityCalculator<int>, IEdgeCapacities<int, int>
+    internal class IntCalculator : IDistanceCalculator<int>, ICapacityCalculator<int>
     {
         public int Compare(int x, int y)
         {
@@ -17,16 +17,6 @@
         public int Negate(int a)
         {
             return -a;
-        }
-
-        public int GetDistance(int edge)
-        {
-            return edge;
-        }
-
-        public int GetCapacity(int edge)
-        {
-            return edge;
         }
     }
 }

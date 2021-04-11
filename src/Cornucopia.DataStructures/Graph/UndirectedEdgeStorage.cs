@@ -16,6 +16,11 @@ namespace Cornucopia.DataStructures.Graph
             return new(~edge.Index);
         }
 
+        public static int GetIndex(EdgeIdx edge)
+        {
+            return edge.Index ^ (edge.Index >> 31);
+        }
+
         public void AddOutEdge(ref DynamicArrayBlockAllocator<EdgeIdx> links, ref int start, EdgeIdx edge)
         {
             if (start < 0)

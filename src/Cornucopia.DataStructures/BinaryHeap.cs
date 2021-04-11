@@ -122,4 +122,36 @@ namespace Cornucopia.DataStructures
             return item;
         }
     }
+
+    /// <summary>
+    ///     A min-heap based on the simple binary heap structure.
+    /// </summary>
+    /// <typeparam name="TKey">The type of elements to store in the heap.</typeparam>
+    /// <typeparam name="TValue">The type of priorities in the heap.</typeparam>
+    public class BinaryHeap<TKey, TValue> : BinaryHeap<KeyValuePair<TKey, TValue>>
+    {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="BinaryHeap{TKey,TValue}"/> class that is empty.
+        /// </summary>
+        /// <param name="comparer">The comparer used to compare priorities.</param>
+        public BinaryHeap(IComparer<TValue> comparer)
+            : base(new ValueComparer(comparer))
+        {
+        }
+
+        private class ValueComparer : IComparer<KeyValuePair<TKey, TValue>>
+        {
+            private readonly IComparer<TValue> _comparer;
+
+            public ValueComparer(IComparer<TValue> comparer)
+            {
+                this._comparer = comparer;
+            }
+
+            public int Compare(KeyValuePair<TKey, TValue> x, KeyValuePair<TKey, TValue> y)
+            {
+                return this._comparer.Compare(x.Value, y.Value);
+            }
+        }
+    }
 }

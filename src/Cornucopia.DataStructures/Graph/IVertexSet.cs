@@ -3,8 +3,7 @@
     /// <summary>
     ///     Defines methods to get the number of vertices in a graph.
     /// </summary>
-    /// <typeparam name="TVertex">The type of data tagged to a vertex.</typeparam>
-    public interface IVertexSet<TVertex> : IVertices<TVertex>
+    public interface IVertexSet
     {
         /// <summary>
         ///     Gets the number of vertices in this graph.

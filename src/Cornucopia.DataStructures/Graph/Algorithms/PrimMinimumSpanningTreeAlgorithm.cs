@@ -7,27 +7,26 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
     ///     Computes the minimum spanning tree for an undirected graph.
     /// </summary>
     /// <typeparam name="TGraph">The type of graph to compute the minimum spanning tree for.</typeparam>
-    /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
+    /// <typeparam name="TVertexId">The type used to identify vertices.</typeparam>
+    /// <typeparam name="TEdgeId">The type used to identify edges.</typeparam>
     /// <typeparam name="TDistance">The type used for distance calculations.</typeparam>
-    public class PrimMinimumSpanningTreeAlgorithm<TGraph, TEdge, TDistance>
-        where TGraph : IEdges<TEdge>, IImplicitOutEdgesIndices
+    public class PrimMinimumSpanningTreeAlgorithm<TGraph, TVertexId, TEdgeId, TDistance>
+        where TGraph : IImplicitOutEdgesIndices<TVertexId, TEdgeId>, ITaggedEdges<TEdgeId, TDistance>, IEqualityComparerProvider<TVertexId>
+        where TVertexId : notnull
+        where TEdgeId : notnull
     {
-
-        private readonly TGraph _graph;
+        private TGraph _graph;
         private readonly IComparer<TDistance> _comparer;
-        private readonly IEdgeDistances<TEdge, TDistance> _distances;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="PrimMinimumSpanningTreeAlgorithm{TGraph,TEdge,TDistance}"/> class with the graph and the necessary basic calculations.
+        ///     Initializes a new instance of the <see cref="PrimMinimumSpanningTreeAlgorithm{TGraph,TVertexId,TEdgeId,TDistance}"/> class with the graph and the necessary basic calculations.
         /// </summary>
         /// <param name="graph">The graph to compute the minimum spanning tree for.</param>
         /// <param name="comparer">The comparer used to compare distances.</param>
-        /// <param name="distances">The basic method to extract a distance from a tagged edge.</param>
-        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IComparer<TDistance> comparer, IEdgeDistances<TEdge, TDistance> distances)
+        public PrimMinimumSpanningTreeAlgorithm(TGraph graph, IComparer<TDistance> comparer)
         {
             this._graph = graph;
             this._comparer = comparer;
-            this._distances = distances;
         }
 
         /// <summary>
@@ -35,11 +34,11 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         /// </summary>
         /// <param name="startVertex">The vertex where the algorithm should start.</param>
         /// <returns>The set of edges that define the minimum spanning tree.</returns>
-        public ReadOnlySpan<EdgeIdx> ComputeMinimumSpanningTree(VertexIdx startVertex)
+        public ReadOnlySpan<TEdgeId> ComputeMinimumSpanningTree(TVertexId startVertex)
         {
-            var heapNodes = new Dictionary<VertexIdx, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer> { { startVertex, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer.Undefined } };
+            var heapNodes = new Dictionary<TVertexId, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer>(this._graph.Comparer) { { startVertex, PairingHeap<VertexWithDistanceAndEdge>.ElementPointer.Undefined } };
             var todo = new PairingHeap<VertexWithDistanceAndEdge>(new DistanceComparer(this._comparer));
-            var result = new DynamicArray<EdgeIdx>(true);
+            var result = new DynamicArray<TEdgeId>(true);
             ProcessEdges(startVertex);
             while (todo.TryExtractMinimum(out var next))
             {
@@ -50,12 +49,12 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
 
             return result.AsSpan();
 
-            void ProcessEdges(VertexIdx vertex)
+            void ProcessEdges(TVertexId vertex)
             {
                 foreach (var outEdgeIdx in this._graph.GetOutEdges(vertex))
                 {
-                    var outEdge = this._graph.GetEdge(outEdgeIdx);
-                    if (heapNodes.TryGetValue(outEdge.Target, out var vertexState))
+                    var target = this._graph.GetTarget(outEdgeIdx);
+                    if (heapNodes.TryGetValue(target, out var vertexState))
                     {
                         if (vertexState.IsUndefined)
                         {
@@ -63,19 +62,19 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                         }
 
                         var currentBestDistanceToTarget = todo[vertexState].Distance;
-                        var distance = this._distances.GetDistance(outEdge.Data);
+                        var distance = this._graph.GetEdgeTag(outEdgeIdx);
                         if (this._comparer.Compare(distance, currentBestDistanceToTarget) >= 0)
                         {
                             continue;
                         }
 
-                        todo.Decrease(vertexState, new(outEdge.Target, distance, outEdgeIdx));
+                        todo.Decrease(vertexState, new(target, distance, outEdgeIdx));
                     }
                     else
                     {
-                        var distance = this._distances.GetDistance(outEdge.Data);
-                        var node = todo.Insert(new(outEdge.Target, distance, outEdgeIdx));
-                        heapNodes.Add(outEdge.Target, node);
+                        var distance = this._graph.GetEdgeTag(outEdgeIdx);
+                        var node = todo.Insert(new(target, distance, outEdgeIdx));
+                        heapNodes.Add(target, node);
                     }
                 }
             }
@@ -83,16 +82,16 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
 
         private readonly struct VertexWithDistanceAndEdge
         {
-            public VertexWithDistanceAndEdge(VertexIdx vertex, TDistance distance, EdgeIdx edge)
+            public VertexWithDistanceAndEdge(TVertexId vertex, TDistance distance, TEdgeId edge)
             {
                 this.Vertex = vertex;
                 this.Distance = distance;
                 this.Edge = edge;
             }
 
-            public VertexIdx Vertex { get; }
+            public TVertexId Vertex { get; }
             public TDistance Distance { get; }
-            public EdgeIdx Edge { get; }
+            public TEdgeId Edge { get; }
         }
 
         private class DistanceComparer : IComparer<VertexWithDistanceAndEdge>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Cornucopia.DataStructures.Graph
@@ -8,7 +9,7 @@ namespace Cornucopia.DataStructures.Graph
     /// </summary>
     /// <typeparam name="TVertex">The type of data tagged to a vertex.</typeparam>
     /// <typeparam name="TEdge">The type of data tagged to an edge.</typeparam>
-    public class DirectedGraph<TVertex, TEdge> : IMutableGraph<TVertex, TEdge>, IVertexSet<TVertex>, IEdgeSet<TEdge>, IImplicitOutEdgesIndices, IImplicitInEdgesIndices
+    public class DirectedGraph<TVertex, TEdge> : IMutableGraph<VertexIdx, TVertex, EdgeIdx, TEdge>, IVertexSet, ITaggedVertices<VertexIdx, TVertex>, IEdgeSet, ITaggedEdges<EdgeIdx, TEdge>, IImplicitOutEdgesIndices<VertexIdx, EdgeIdx>, IImplicitInEdgesIndices<VertexIdx, EdgeIdx>, IEqualityComparerProvider<VertexIdx>, IEqualityComparerProvider<EdgeIdx>
     {
         private DynamicArrayFreeListAllocator<VertexData> _vertices;
         private DynamicArrayFreeListAllocator<EdgeData> _edges;
@@ -68,71 +69,80 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         /// <inheritdoc/>
-        public ref TVertex this[VertexIdx index] => ref this._vertices[index.Index].Data;
-
-        /// <inheritdoc/>
         public int VertexCount => this._vertices.Count;
 
         /// <inheritdoc/>
-        public ref TEdge this[EdgeIdx index] => ref this._edges[index.Index].Data;
+        public ref TVertex this[VertexIdx index] => ref this._vertices[index.Index].Data;
 
         /// <inheritdoc/>
-        public Edge<TEdge> GetEdge(EdgeIdx index)
+        public TVertex GetVertexTag(VertexIdx vertex)
         {
-            ref var edge = ref this._edges[index.Index];
-            return new Edge<TEdge>(edge.Data, edge.Source, edge.Target);
-        }
-
-        /// <inheritdoc/>
-        public VertexIdx GetSource(EdgeIdx index)
-        {
-            return this._edges[index.Index].Source;
-        }
-
-        /// <inheritdoc/>
-        public VertexIdx GetTarget(EdgeIdx index)
-        {
-            return this._edges[index.Index].Target;
+            return this[vertex];
         }
 
         /// <inheritdoc/>
         public int EdgeCount => this._edges.Count;
 
         /// <inheritdoc/>
-        public int GetOutDegree(VertexIdx index)
+        public ref TEdge this[EdgeIdx index] => ref this._edges[index.Index].Data;
+
+        /// <inheritdoc/>
+        public TEdge GetEdgeTag(EdgeIdx edge)
         {
-            return this._vertices[index.Index].EdgeStorage.OutDegree;
+            return this[edge];
         }
 
         /// <inheritdoc/>
-        public ReadOnlySpan<EdgeIdx> GetOutEdges(VertexIdx index)
+        public int GetOutDegree(VertexIdx vertex)
         {
-            ref var vertex = ref this._vertices[index.Index];
-            if (vertex.StartIndex < 0)
+            return this._vertices[vertex.Index].EdgeStorage.OutDegree;
+        }
+
+        /// <inheritdoc/>
+        public ReadOnlySpan<EdgeIdx> GetOutEdges(VertexIdx vertex)
+        {
+            ref var vertexData = ref this._vertices[vertex.Index];
+            if (vertexData.StartIndex < 0)
             {
                 return ReadOnlySpan<EdgeIdx>.Empty;
             }
 
-            return this._links.AsSpan(vertex.StartIndex, vertex.EdgeStorage.OutDegree);
+            return this._links.AsSpan(vertexData.StartIndex, vertexData.EdgeStorage.OutDegree);
         }
 
         /// <inheritdoc/>
-        public int GetInDegree(VertexIdx index)
+        public VertexIdx GetTarget(EdgeIdx edge)
         {
-            return this._vertices[index.Index].EdgeStorage.InDegree;
+            return this._edges[edge.Index].Target;
         }
 
         /// <inheritdoc/>
-        public ReadOnlySpan<EdgeIdx> GetInEdges(VertexIdx index)
+        public int GetInDegree(VertexIdx vertex)
         {
-            ref var vertex = ref this._vertices[index.Index];
-            if (vertex.StartIndex < 0)
+            return this._vertices[vertex.Index].EdgeStorage.InDegree;
+        }
+
+        /// <inheritdoc/>
+        public ReadOnlySpan<EdgeIdx> GetInEdges(VertexIdx vertex)
+        {
+            ref var vertexData = ref this._vertices[vertex.Index];
+            if (vertexData.StartIndex < 0)
             {
                 return ReadOnlySpan<EdgeIdx>.Empty;
             }
 
-            return this._links.AsSpan(vertex.StartIndex + vertex.EdgeStorage.OutDegree, vertex.EdgeStorage.InDegree);
+            return this._links.AsSpan(vertexData.StartIndex + vertexData.EdgeStorage.OutDegree, vertexData.EdgeStorage.InDegree);
         }
+
+        /// <inheritdoc/>
+        public VertexIdx GetSource(EdgeIdx edge)
+        {
+            return this._edges[edge.Index].Source;
+        }
+
+        IEqualityComparer<VertexIdx>? IEqualityComparerProvider<VertexIdx>.Comparer => null;
+
+        IEqualityComparer<EdgeIdx>? IEqualityComparerProvider<EdgeIdx>.Comparer => null;
 
         [DebuggerDisplay("{" + nameof(Data) + "}")]
         private struct VertexData

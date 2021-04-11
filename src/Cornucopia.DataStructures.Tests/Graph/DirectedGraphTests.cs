@@ -28,11 +28,11 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
-        public void AddVertex_Empty_GetItemReturnsData()
+        public void AddVertex_Empty_GetVertexTagReturnsData()
         {
             var graph = new DirectedGraph<int, int>();
             var v = graph.AddVertex(42);
-            Assert.That(graph[v], Is.EqualTo(42));
+            Assert.That(graph.GetVertexTag(v), Is.EqualTo(42));
         }
 
         [Test]
@@ -46,13 +46,13 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
-        public void AddEdge_GraphWithTwoVertices_GetItemReturnsData()
+        public void AddEdge_GraphWithTwoVertices_GetEdgeTagReturnsData()
         {
             var graph = new DirectedGraph<int, int>();
             var v1 = graph.AddVertex(0);
             var v2 = graph.AddVertex(0);
             var e = graph.AddEdge(v1, v2, 42);
-            Assert.That(graph[e], Is.EqualTo(42));
+            Assert.That(graph.GetEdgeTag(e), Is.EqualTo(42));
         }
 
         [Test]

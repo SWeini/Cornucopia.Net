@@ -15,7 +15,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeShortestPath_SimpleGraph_ReturnsCorrectDistance(int start, int target, int distance)
         {
             var g = CreateGraph(5, false, (0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1), (0, 4, 5));
-            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, int, int>(g, new IntCalculator(), new IntCalculator());
+            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, VertexIdx, EdgeIdx, int>(g, new IntCalculator());
             a.ComputeShortestPath(new VertexIdx(start), new VertexIdx(target), out var shortestDistance);
             Assert.That(shortestDistance, Is.EqualTo(distance));
         }
@@ -24,7 +24,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeShortestPath_SimpleGraphNotReachable_Throws()
         {
             var g = CreateGraph(5, false, (0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1), (0, 4, 5));
-            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, int, int>(g, new IntCalculator(), new IntCalculator());
+            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, VertexIdx, EdgeIdx, int>(g, new IntCalculator());
             Assert.That(() => a.ComputeShortestPath(new VertexIdx(2), new VertexIdx(0), out _), Throws.ArgumentException);
         }
 
@@ -33,7 +33,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeShortestPath_SimpleGraph_IsCorrectPath(int start, int target, params int[] edges)
         {
             var g = CreateGraph(5, false, (0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1), (0, 4, 5));
-            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, int, int>(g, new IntCalculator(), new IntCalculator());
+            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, VertexIdx, EdgeIdx, int>(g, new IntCalculator());
             var path = a.ComputeShortestPath(new VertexIdx(start), new VertexIdx(target), out _);
             Assert.That(path.ToArray(), Is.EqualTo(edges.Select(x => new EdgeIdx(x))));
         }
@@ -42,7 +42,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
         public void ComputeShortestPath_WikipediaExample_ReturnsCorrectDistance()
         {
             var g = CreateGraph(6, true, (0, 1, 7), (0, 2, 9), (0, 5, 15), (1, 2, 10), (1, 3, 15), (2, 3, 11), (2, 5, 2), (3, 4, 6), (4, 5, 9));
-            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, int, int>(g, new IntCalculator(), new IntCalculator());
+            var a = new DijkstraShortestPathAlgorithm<DirectedGraph<Empty, int>, VertexIdx, EdgeIdx, int>(g, new IntCalculator());
             a.ComputeShortestPath(new VertexIdx(0), new VertexIdx(4), out var shortestDistance);
             Assert.That(shortestDistance, Is.EqualTo(20));
         }
