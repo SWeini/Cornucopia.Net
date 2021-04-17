@@ -60,7 +60,7 @@ namespace Cornucopia.DataStructures.Graph.Algorithms
                     var currentDistance = this._calculator.Add(next.Value, this._graph.GetEdgeTag(edgeId));
                     if (minimalDistance.TryGetValue(target, out var oldDistance))
                     {
-                        if (this._calculator.Compare(currentDistance, oldDistance) > 0)
+                        if (this._calculator.Compare(currentDistance, oldDistance) >= 0)
                         {
                             continue;
                         }
