@@ -319,4 +319,58 @@ namespace Cornucopia.DataStructures
             internal OptimizedChildSiblingTreeNode<T> Node => this._node!;
         }
     }
+
+    /// <summary>
+    ///     A min-heap based on the pairing heap structure.
+    /// </summary>
+    /// <typeparam name="TKey">The type of elements to store in the heap.</typeparam>
+    /// <typeparam name="TValue">The type of priorities in the heap.</typeparam>
+    public class PairingHeap<TKey, TValue> : PairingHeap<KeyValuePair<TKey, TValue>>
+    {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="PairingHeap{TKey,TValue}"/> class that is empty.
+        /// </summary>
+        /// <param name="comparer">The comparer used to compare priorities.</param>
+        public PairingHeap(IComparer<TValue> comparer)
+            : base(new ValueComparer(comparer))
+        {
+        }
+
+        /// <summary>
+        ///     Inserts an element into the heap.
+        /// </summary>
+        /// <param name="item">The element to insert into the heap.</param>
+        /// <param name="priority">The priority of the inserted element.</param>
+        /// <returns>The pointer to the inserted element.</returns>
+        public ElementPointer Insert(TKey item, TValue priority)
+        {
+            return this.Insert(new KeyValuePair<TKey, TValue>(item, priority));
+        }
+
+        /// <summary>
+        ///     Decreases the priority of a specified element.
+        /// </summary>
+        /// <param name="element">The pointer to the element to decrease.</param>
+        /// <param name="priority">The new priority of the element.</param>
+        /// <remarks>It is undefined behavior to increase the priority.</remarks>
+        public void Decrease(ElementPointer element, TValue priority)
+        {
+            this.Decrease(element, new KeyValuePair<TKey, TValue>(this[element].Key, priority));
+        }
+
+        private class ValueComparer : IComparer<KeyValuePair<TKey, TValue>>
+        {
+            private readonly IComparer<TValue> _comparer;
+
+            public ValueComparer(IComparer<TValue> comparer)
+            {
+                this._comparer = comparer;
+            }
+
+            public int Compare(KeyValuePair<TKey, TValue> x, KeyValuePair<TKey, TValue> y)
+            {
+                return this._comparer.Compare(x.Value, y.Value);
+            }
+        }
+    }
 }
