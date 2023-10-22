@@ -73,7 +73,8 @@ namespace Cornucopia.DataStructures
 
             var newIndex = this.Allocate(size);
             var span = this._array.AsSpan();
-            span.Slice(index, oldSize).CopyTo(span.Slice(newIndex, oldSize));
+            var copySize = Math.Min(oldSize, size);
+            span.Slice(index, copySize).CopyTo(span.Slice(newIndex, copySize));
             this.Deallocate(index, oldSize);
             return newIndex;
         }
