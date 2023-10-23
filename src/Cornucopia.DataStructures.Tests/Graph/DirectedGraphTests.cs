@@ -173,6 +173,23 @@ namespace Cornucopia.DataStructures.Graph
         }
 
         [Test]
+        public void RemoveEdge_ResizeWithAllocationAtEnd_OutDegreeIsOne()
+        {
+            var graph = new DirectedGraph<int, int>();
+            var v1 = graph.AddVertex(0);
+            var v2 = graph.AddVertex(0);
+            var v3 = graph.AddVertex(0);
+            var v4 = graph.AddVertex(0);
+            var v5 = graph.AddVertex(0);
+            graph.AddEdge(v1, v2, 0);
+            graph.AddEdge(v2, v3, 0);
+            var e = graph.AddEdge(v2, v4, 0);
+            graph.AddEdge(v3, v5, 0);
+            graph.RemoveEdge(e);
+            Assert.That(graph.GetOutDegree(v2), Is.EqualTo(1));
+        }
+
+        [Test]
         public void GetOutEdges_NoOutEdges_IsEmpty()
         {
             var graph = new DirectedGraph<int, int>();
