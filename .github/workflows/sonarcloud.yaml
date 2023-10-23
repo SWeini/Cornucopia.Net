@@ -16,7 +16,7 @@ jobs:
       with:
         fetch-depth: '0'
     - name: SonarScanner
-      uses: highbyte/sonarscan-dotnet@2.0
+      uses: highbyte/sonarscan-dotnet@v2.1.5
       with:
         sonarProjectKey: SWeini_Cornucopia.Net
         sonarProjectName: Cornucopia.Net
